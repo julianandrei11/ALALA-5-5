@@ -272,6 +272,28 @@ export class MemoryRecallChallengePage implements OnDestroy {
     const recallDurationSeconds =
       this.recallStartedAtMs ? Math.max(0, Math.round((Date.now() - this.recallStartedAtMs) / 1000)) : 0;
 
+    const perItemSeconds =
+      this.studyCards.length > 0 ? Number((recallDurationSeconds / this.studyCards.length).toFixed(1)) : 0;
+
+    const toLabel = (asset: string): string => {
+      const parts = (asset || '').split('/');
+      const last = parts[parts.length - 1] || '';
+      const base = last.replace(/\\.[a-z0-9]+$/i, '');
+      return base.replace(/[-_]+/g, ' ').trim() || asset;
+    };
+
+    // For Memory Recall: "correct answers" are the studied cards. "patient choice" is whether they selected it.
+    const selectedSet = new Set(this.recallCards.filter(c => c.isSelected).map(c => c.emoji));
+    const items = this.studyCards.map((emoji) => {
+      const picked = selectedSet.has(emoji);
+      return {
+        correctAnswer: toLabel(emoji),
+        selectedAnswer: picked ? 'Selected' : 'Not selected',
+        isCorrect: picked,
+        durationSeconds: perItemSeconds,
+      };
+    });
+
     const sessionData = {
       category: 'memory-recall-challenge',
       // Canonical fields used by statistics/progress pages
@@ -285,6 +307,7 @@ export class MemoryRecallChallengePage implements OnDestroy {
       distractionCompleted: this.distractionCompleted,
       distractionType: this.distractionType,
       timestamp: Date.now(),
+      items,
 
       // Aliases that match the Memory Recall record schema wording exactly
       studySetSize: this.studyCards.length,

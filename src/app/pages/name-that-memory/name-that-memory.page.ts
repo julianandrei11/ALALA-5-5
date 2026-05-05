@@ -178,6 +178,24 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
   /** Timestamp when the game started (for duration tracking) */
   private gameStartTime = 0;
 
+  /** Timestamp when the current question started (per-card timing). */
+  private questionStartTime = 0;
+
+  /** Per-question details for Recent Sessions drill-down. */
+  private sessionItems: Array<{
+    /** The correct label for this flashcard. */
+    correctAnswer: string;
+    /** What the user picked (or null if skipped). */
+    selectedAnswer: string | null;
+    /** Whether user got it correct (false if skipped). */
+    isCorrect: boolean;
+    /** Time spent on this question in seconds. */
+    durationSeconds: number;
+  }> = [];
+
+  /** Guard to avoid recording a question twice. */
+  private recordedThisQuestion = false;
+
   // ─────────────────────────────────────────────────────────────────────────────
   // SUBSCRIPTIONS & TIMERS
   // ─────────────────────────────────────────────────────────────────────────────
@@ -553,6 +571,8 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
     const card = base[Math.floor(Math.random() * base.length)];
     this.askedLabels.add(card.label);
     this.currentCard = card;
+    this.questionStartTime = Date.now();
+    this.recordedThisQuestion = false;
 
     // Maghimo ug sayop nga answer options
     const correct = card.label;
@@ -598,6 +618,8 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
     this.isCorrect = this.isSimilar(choice, correct) || choice === correct;
     if (this.isCorrect) this.correctAnswers++;
 
+    this.recordQuestion(choice, false);
+
     // Check whether this is the last question
     this.shouldCompleteAfterResult = (this.currentQuestion >= this.totalQuestions);
     this.showResult = true;
@@ -609,6 +631,8 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
     
     this.skipCount++;
     if (this.currentCard.id) this.skippedCardIds.push(this.currentCard.id);
+
+    this.recordQuestion(null, true);
 
     // Continue to the next question or end the game
     if (this.currentQuestion >= this.totalQuestions) {
@@ -659,6 +683,7 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
       correctAnswers: this.correctAnswers,
       skipped: this.skipCount,
       totalTime: totalTimeSeconds,
+      items: this.sessionItems.slice(),
       timestamp: Date.now()
     };
 
@@ -691,6 +716,27 @@ export class NameThatMemoryPage implements OnInit, OnDestroy {
     // Show completion modal
     this.showResult = false;
     this.showGameComplete = true;
+  }
+
+  private recordQuestion(selectedAnswer: string | null, skipped: boolean): void {
+    if (this.recordedThisQuestion) return;
+    if (!this.currentCard) return;
+
+    const startedAt = Number(this.questionStartTime || 0);
+    const elapsed = startedAt > 0 ? (Date.now() - startedAt) / 1000 : 0;
+    const durationSeconds = Number.isFinite(elapsed) ? Math.max(0, Number(elapsed.toFixed(1))) : 0;
+
+    const correctAnswer = (this.currentCard.label || '').toString();
+    const isCorrect = skipped ? false : (selectedAnswer != null ? (this.isSimilar(selectedAnswer, correctAnswer) || selectedAnswer === correctAnswer) : false);
+
+    this.sessionItems.push({
+      correctAnswer,
+      selectedAnswer,
+      isCorrect,
+      durationSeconds,
+    });
+
+    this.recordedThisQuestion = true;
   }
 
   /** Close the game complete modal and navigate Home */

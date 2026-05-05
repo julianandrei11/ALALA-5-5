@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 export class RecentSessionsPage implements OnInit {
   isLoading = true;
   recentSessions: any[] = [];
+  selectedSession: any | null = null;
+  isSessionModalOpen = false;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -50,12 +52,37 @@ export class RecentSessionsPage implements OnInit {
       })
       .slice(0, 20);
 
-    this.recentSessions = sortedSessions.map(session => ({
-      ...session,
-      date: new Date(session.timestamp),
-      accuracy: this.calculateSessionAccuracy(session),
-      duration: Math.floor((session.totalTime || 0) / 60)
-    }));
+    this.recentSessions = sortedSessions.map((session) => {
+      const totalTimeRaw = Number(session.totalTime || 0);
+      const totalTimeSeconds = Number.isFinite(totalTimeRaw) ? Math.max(0, totalTimeRaw) : 0;
+
+      return {
+        ...session,
+        date: new Date(session.timestamp),
+        accuracy: this.calculateSessionAccuracy(session),
+        durationSeconds: totalTimeSeconds,
+      };
+    });
+  }
+
+  formatSeconds(seconds: number, decimals: number = 1): string {
+    const s = Number(seconds);
+    const safe = Number.isFinite(s) ? Math.max(0, s) : 0;
+    return `${safe.toFixed(decimals)}s`;
+  }
+
+  openSessionDetails(session: any): void {
+    this.selectedSession = session || null;
+    this.isSessionModalOpen = true;
+  }
+
+  closeSessionDetails(): void {
+    this.isSessionModalOpen = false;
+    this.selectedSession = null;
+  }
+
+  hasSessionItemDetails(session: any): boolean {
+    return Array.isArray(session?.items) && session.items.length > 0;
   }
 
   calculateSessionAccuracy(session: any): number {

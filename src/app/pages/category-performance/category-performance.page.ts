@@ -50,6 +50,12 @@ export class CategoryPerformancePage implements OnInit {
     this.categoryStats = buildGameCategoryStatsRows(sessions);
   }
 
+  formatSeconds(seconds: number, decimals: number = 1): string {
+    const s = Number(seconds);
+    const safe = Number.isFinite(s) ? Math.max(0, s) : 0;
+    return `${safe.toFixed(decimals)}s`;
+  }
+
   goBack() {
     this.location.back();
   }

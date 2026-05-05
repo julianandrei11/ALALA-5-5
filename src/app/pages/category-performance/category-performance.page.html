@@ -42,7 +42,7 @@
           </div>
           <div class="stat-row">
             <span>Avg Time:</span>
-            <span class="stat-value">{{ category.avgTime }}s</span>
+            <span class="stat-value">{{ formatSeconds(category.avgTime) }}</span>
           </div>
         </div>
         <div class="category-stats category-stats--record" *ngIf="isRecordStatCategory(category)">
@@ -55,7 +55,7 @@
           <p class="record-hint">Correct responses / items</p>
           <div class="stat-row">
             <span>Avg Time:</span>
-            <span class="stat-value">{{ category.avgTime }}s</span>
+            <span class="stat-value">{{ formatSeconds(category.avgTime) }}</span>
           </div>
         </div>
         <div class="progress-bar" *ngIf="!isRecordStatCategory(category)">

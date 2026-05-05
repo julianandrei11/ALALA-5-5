@@ -169,6 +169,22 @@ ion-header ion-title {
   transform: translateY(-2px);
 }
 
+/* Modal content uses the same theme; make list items feel clickable. */
+.session-item[role='button'] {
+  cursor: pointer;
+}
+
+.session-item[role='button']:active {
+  transform: translateY(0);
+}
+
+/* Ionic modal sizing */
+ion-modal.session-details-modal {
+  --width: min(92vw, 560px);
+  --height: min(88vh, 860px);
+  --border-radius: 18px;
+}
+
 .session-date {
   display: flex;
   align-items: center;

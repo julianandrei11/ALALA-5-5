@@ -103,7 +103,15 @@ export class GuessTheSilhouettesPage {
   feedbackMessage = '';
   private feedbackTimeoutId: number | null = null;
   private roundStartedAtMs: number | null = null;
+  private questionStartedAtMs: number | null = null;
   choiceLocked = false;
+
+  private sessionItems: Array<{
+    correctAnswer: string;
+    selectedAnswer: string | null;
+    isCorrect: boolean;
+    durationSeconds: number;
+  }> = [];
 
   constructor(
     private router: Router,
@@ -158,6 +166,8 @@ export class GuessTheSilhouettesPage {
     this.correctCount = 0;
     this.choiceLocked = false;
     this.roundStartedAtMs = Date.now();
+    this.questionStartedAtMs = Date.now();
+    this.sessionItems = [];
     this.rounds = this.buildRounds();
     this.clearFeedback();
   }
@@ -166,6 +176,7 @@ export class GuessTheSilhouettesPage {
     if (this.screen !== 'game' || !this.currentRound || this.choiceLocked) return;
     this.choiceLocked = true;
     const ok = label === this.currentRound.correctLabel;
+    this.recordRound(label, ok);
     if (ok) {
       this.correctCount++;
       this.setFeedback('Nice! That matches the outline.', 900);
@@ -180,6 +191,7 @@ export class GuessTheSilhouettesPage {
         return;
       }
       this.roundIndex++;
+      this.questionStartedAtMs = Date.now();
       this.choiceLocked = false;
     }, ok ? 650 : 900);
   }
@@ -198,6 +210,8 @@ export class GuessTheSilhouettesPage {
     this.roundIndex = 0;
     this.correctCount = 0;
     this.roundStartedAtMs = null;
+    this.questionStartedAtMs = null;
+    this.sessionItems = [];
     this.choiceLocked = false;
     this.clearFeedback();
   }
@@ -249,6 +263,7 @@ export class GuessTheSilhouettesPage {
       correctAnswers: this.correctCount,
       skipped: 0,
       totalTime: durationSeconds,
+      items: this.sessionItems.slice(),
       timestamp: Date.now(),
     };
 
@@ -257,6 +272,20 @@ export class GuessTheSilhouettesPage {
     } catch (error) {
       console.error('Error saving Guess the Silhouettes session:', error);
     }
+  }
+
+  private recordRound(selectedAnswer: string, isCorrect: boolean): void {
+    if (!this.currentRound) return;
+    const startedAt = this.questionStartedAtMs ?? this.roundStartedAtMs;
+    const elapsed = startedAt !== null ? (Date.now() - startedAt) / 1000 : 0;
+    const durationSeconds = Number.isFinite(elapsed) ? Math.max(0, Number(elapsed.toFixed(1))) : 0;
+
+    this.sessionItems.push({
+      correctAnswer: this.currentRound.correctLabel,
+      selectedAnswer,
+      isCorrect,
+      durationSeconds,
+    });
   }
 
   private shuffle<T>(arr: T[]): T[] {

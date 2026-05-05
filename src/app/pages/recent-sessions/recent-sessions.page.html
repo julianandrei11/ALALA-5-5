@@ -26,7 +26,14 @@
     </div>
 
     <div class="session-list" *ngIf="recentSessions.length > 0">
-      <div class="session-item" *ngFor="let session of recentSessions">
+      <div
+        class="session-item"
+        *ngFor="let session of recentSessions"
+        role="button"
+        tabindex="0"
+        (click)="openSessionDetails(session)"
+        (keydown.enter)="openSessionDetails(session)"
+        (keydown.space)="$event.preventDefault(); openSessionDetails(session)">
         <div class="session-date">
           <ion-icon name="calendar-outline"></ion-icon>
           <span>{{ session.date | date:'M/d/yy, h:mm a' }}</span>
@@ -40,8 +47,8 @@
           </div>
           <div class="session-meta">
             {{ session.correctAnswers || 0 }}/{{ session.totalQuestions || 0 }} correct •
-            {{ session.duration }}min •
-            {{ session.skippedCards || 0 }} skipped
+            {{ formatSeconds(session.durationSeconds) }} •
+            {{ (session.skippedCards ?? session.skipped ?? 0) }} skipped
           </div>
         </div>
       </div>
@@ -73,5 +80,88 @@
       <ion-icon name="trophy-outline"></ion-icon>
     </div>
   </div>
+
+  <ion-modal
+    [isOpen]="isSessionModalOpen"
+    (didDismiss)="closeSessionDetails()"
+    cssClass="session-details-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="app-toolbar-purple">
+          <ion-title class="header-title">Session Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" color="light" (click)="closeSessionDetails()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="recent-sessions-screen" fullscreen>
+        <div class="header-spacer"></div>
+
+        <div class="game-section" *ngIf="selectedSession">
+          <div class="section-header-text">
+            <h2> Session Summary</h2>
+            <p>
+              {{ selectedSession.date | date:'M/d/yy, h:mm a' }} •
+              {{ selectedSession.category || 'Unknown Category' }}
+            </p>
+          </div>
+
+          <div class="session-item">
+            <div class="session-details">
+              <div class="session-stat">
+                <span>{{ selectedSession.category || 'Unknown Category' }}</span>
+                <span class="accuracy-badge" [class]="getAccuracyClass(selectedSession.accuracy)">
+                  {{ selectedSession.accuracy }}%
+                </span>
+              </div>
+              <div class="session-meta">
+                {{ selectedSession.correctAnswers || 0 }}/{{ selectedSession.totalQuestions || 0 }} correct •
+                {{ formatSeconds(selectedSession.durationSeconds) }} •
+                {{ (selectedSession.skippedCards ?? selectedSession.skipped ?? 0) }} skipped
+              </div>
+            </div>
+          </div>
+
+          <div class="section-header-text" style="margin-top: 18px;">
+            <h2> Flashcard Answers</h2>
+            <p>Per-card time and answers</p>
+          </div>
+
+          <div *ngIf="!hasSessionItemDetails(selectedSession)" class="no-sessions-message">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <h3>Details not available</h3>
+            <p>
+              This session was saved without per-flashcard details. Play a new session and open it here to see
+              the answer + duration for each flashcard.
+            </p>
+          </div>
+
+          <div class="session-list" *ngIf="hasSessionItemDetails(selectedSession)">
+            <div class="session-item" *ngFor="let item of selectedSession.items; let i = index">
+              <div class="session-date">
+                <ion-icon [name]="item.isCorrect ? 'checkmark-circle-outline' : 'close-circle-outline'"></ion-icon>
+                <span>Flashcard {{ i + 1 }}</span>
+              </div>
+              <div class="session-details">
+                <div class="session-stat">
+                  <span>{{ item.correctAnswer || '—' }}</span>
+                  <span class="accuracy-badge" [class]="item.isCorrect ? 'excellent' : 'poor'">
+                    {{ item.isCorrect ? 'Correct' : (item.selectedAnswer ? 'Wrong' : 'Skipped') }}
+                  </span>
+                </div>
+                <div class="session-meta">
+                  Answer: {{ item.selectedAnswer || '—' }} •
+                  Time: {{ formatSeconds(item.durationSeconds) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
 

@@ -234,6 +234,7 @@ export class StatisticsPage implements OnInit {
     try {
       const sessions = (await this.fetchGameSessions()) || [];
       this.sessionsForPeriod = sessions;
+      this.updateHasDataForPeriod(sessions);
       this.calculateOverallStats(sessions);
     } catch (error) {
       console.error('Error loading progress data:', error);
@@ -282,7 +283,7 @@ export class StatisticsPage implements OnInit {
       }
 
       // Recall Phase time should be an average per session.
-      totalTimeSeconds = Math.round(totalTimeSeconds / Math.max(1, tabSessions.length));
+      totalTimeSeconds = Number((totalTimeSeconds / Math.max(1, tabSessions.length)).toFixed(1));
       const studySetSize = Math.round(totalQuestions / Math.max(1, tabSessions.length));
 
       // Weighted across sessions (total correct / total studied).
@@ -300,7 +301,7 @@ export class StatisticsPage implements OnInit {
       // Reuse existing UI fields: accuracy donut + record fraction.
       this.overallStats = {
         accuracy: Math.max(0, Math.min(100, Math.round(delayedRecallPercent || 0))),
-        avgTimePerCard: totalQuestions > 0 ? Math.round(totalTimeSeconds / totalQuestions) : 0,
+        avgTimePerCard: totalQuestions > 0 ? Number((totalTimeSeconds / totalQuestions).toFixed(1)) : 0,
         totalCards: totalQuestions,
         cardsMistaken: Math.max(0, totalQuestions - correctAnswers),
         recordCorrect: correctAnswers,
@@ -323,7 +324,7 @@ export class StatisticsPage implements OnInit {
 
     this.overallStats = {
       accuracy: totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0,
-      avgTimePerCard: totalQuestions > 0 ? Math.round(totalTime / totalQuestions) : 0,
+      avgTimePerCard: totalQuestions > 0 ? Number((totalTime / totalQuestions).toFixed(1)) : 0,
       totalCards: totalQuestions,
       cardsMistaken,
       recordCorrect: totalCorrect,
@@ -362,6 +363,12 @@ export class StatisticsPage implements OnInit {
     return `${mm}:${ss}`;
   }
 
+  formatSeconds(seconds: number, decimals: number = 1): string {
+    const s = Number(seconds);
+    const safe = Number.isFinite(s) ? Math.max(0, s) : 0;
+    return `${safe.toFixed(decimals)}s`;
+  }
+
   onPeriodChange() {
     this.loadProgressData();
   }
@@ -369,9 +376,20 @@ export class StatisticsPage implements OnInit {
   selectGameTab(tab: StatisticsGameTab) {
     if (this.selectedGameTab === tab) return;
     this.selectedGameTab = tab;
+    this.updateHasDataForPeriod(this.sessionsForPeriod);
     this.calculateOverallStats(this.sessionsForPeriod);
     this.cdr.detectChanges();
     setTimeout(() => this.refreshChart(), 0);
+  }
+
+  /**
+   * Keep `hasDataForPeriod` in sync with the active filter + tab.
+   * This prevents a "No Data" custom-range state from hiding the canvas
+   * and blocking the chart from re-mounting when data becomes available.
+   */
+  private updateHasDataForPeriod(sessions: any[]): void {
+    const tabSessions = filterSessionsForStatisticsTab(sessions || [], this.selectedGameTab);
+    this.hasDataForPeriod = tabSessions.length > 0;
   }
 
   private getChartCatsForTab(): { key: string; label: string; color: string }[] {

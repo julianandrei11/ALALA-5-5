@@ -170,6 +170,23 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
   /** Mga labels nga na-pangutana na (para di mausab) */
   private askedLabels = new Set<string>();
 
+  /** Timestamp when the game started (for total duration tracking). */
+  private gameStartTime = 0;
+
+  /** Timestamp when the current question started (per-card timing). */
+  private questionStartTime = 0;
+
+  /** Per-question details for Recent Sessions drill-down. */
+  private sessionItems: Array<{
+    correctAnswer: string;
+    selectedAnswer: string | null;
+    isCorrect: boolean;
+    durationSeconds: number;
+  }> = [];
+
+  /** Guard to avoid recording a question twice. */
+  private recordedThisQuestion = false;
+
   // ─────────────────────────────────────────────────────────────────────────────
   // DEFAULT CATEGORIES (fallback when there aren't enough categories)
   // ─────────────────────────────────────────────────────────────────────────────
@@ -313,6 +330,10 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
     this.showGameComplete = false;
     this.shouldCompleteAfterResult = false;
     this.askedLabels.clear();
+    this.sessionItems = [];
+    this.gameStartTime = Date.now();
+    this.questionStartTime = 0;
+    this.recordedThisQuestion = false;
 
     // Start the game if there are cards
     if (this.gameCards.length > 0 && this.totalQuestions > 0) {
@@ -392,7 +413,8 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
         }
       }
     } catch {}
-    this.setupNewRun();
+    // Do not start the game here — route params (builtin/custom) may not be applied yet.
+    // `applyRouteSelectionFromParams()` calls `setupNewRun()` once selection is known.
   }
 
   // ═══════════════════════════════════════════════════════════════════════════════
@@ -614,6 +636,8 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
     ];
     this.askedLabels.add(card.label);
     this.currentCard = card;
+    this.questionStartTime = Date.now();
+    this.recordedThisQuestion = false;
 
     // Maghimo ug sayop nga category options
     const correctDisplay = this.displayCategory(card.category);
@@ -661,6 +685,8 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
                      this.normalizeToken(choice) === this.normalizeToken(correctDisplay);
     if (this.isCorrect) this.correctAnswers++;
 
+    this.recordQuestion(choice, false);
+
     // Check whether this is the last question
     this.shouldCompleteAfterResult = (this.currentQuestion >= this.totalQuestions);
     this.showResult = true;
@@ -672,6 +698,7 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
     
     this.skipCount++;
     if (this.currentCard.id) this.skippedCardIds.push(this.currentCard.id);
+    this.recordQuestion(null, true);
 
     // Continue to the next question or end the game
     if (this.currentQuestion >= this.totalQuestions) {
@@ -699,13 +726,16 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
 
   /** End the game and save progress */
   async endGame() {
+    const totalTimeSeconds =
+      this.gameStartTime > 0 ? Math.max(0, Math.round((Date.now() - this.gameStartTime) / 1000)) : 0;
     // Prepare session data
     const sessionData = {
       category: 'category-match',
       totalQuestions: this.totalQuestions,
       correctAnswers: this.correctAnswers,
       skipped: this.skipCount,
-      totalTime: 0,
+      totalTime: totalTimeSeconds,
+      items: this.sessionItems.slice(),
       timestamp: Date.now()
     };
 
@@ -736,6 +766,32 @@ export class CategoryMatchPage implements OnInit, OnDestroy {
     } catch (e) {
       console.warn('Progress save/refresh failed:', e);
     }
+  }
+
+  private recordQuestion(selectedAnswer: string | null, skipped: boolean): void {
+    if (this.recordedThisQuestion) return;
+    if (!this.currentCard) return;
+
+    const startedAt = Number(this.questionStartTime || 0);
+    const elapsed = startedAt > 0 ? (Date.now() - startedAt) / 1000 : 0;
+    const durationSeconds = Number.isFinite(elapsed) ? Math.max(0, Number(elapsed.toFixed(1))) : 0;
+
+    const correctAnswer = this.displayCategory(this.currentCard.category);
+    const isCorrect = skipped
+      ? false
+      : selectedAnswer != null
+        ? this.isSimilar(selectedAnswer, correctAnswer) ||
+          this.normalizeToken(selectedAnswer) === this.normalizeToken(correctAnswer)
+        : false;
+
+    this.sessionItems.push({
+      correctAnswer,
+      selectedAnswer,
+      isCorrect,
+      durationSeconds,
+    });
+
+    this.recordedThisQuestion = true;
   }
 
   /** Close the game complete modal and navigate to Brain Games */

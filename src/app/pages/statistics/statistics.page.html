@@ -237,7 +237,7 @@
               <ion-icon name="time-outline"></ion-icon>
             </div>
             <div class="stat-content">
-              <h3>{{ overallStats.avgTimePerCard }}s</h3>
+              <h3>{{ formatSeconds(overallStats.avgTimePerCard) }}</h3>
               <p>Avg Time/Card</p>
             </div>
           </div>
@@ -261,7 +261,7 @@
         <div class="stats-grid stats-grid--metrics" *ngIf="selectedGameTab === 'memory-recall'">
           <div class="stat-card record">
             <div class="stat-icon">
-              <ion-icon name="clipboard-outline"></ion-icon>
+              <ion-icon name="ribbon-outline"></ion-icon>
             </div>
             <div class="stat-content stat-content--record">
               <h3 class="stat-record-fraction" aria-label="Correct answers out of study set size">
@@ -275,21 +275,21 @@
 
           <div class="stat-card time">
             <div class="stat-icon">
-              <ion-icon name="alert-circle-outline"></ion-icon>
+              <ion-icon name="time-outline"></ion-icon>
             </div>
             <div class="stat-content">
-              <h3>{{ memoryRecallDisplay.falseSelections }}</h3>
-              <p>False Selections</p>
+              <h3>{{ formatSeconds(memoryRecallDisplay.totalTimeSeconds) }}</h3>
+              <p>Recall Time Average</p>
             </div>
           </div>
 
           <div class="stat-card time">
             <div class="stat-icon">
-              <ion-icon name="time-outline"></ion-icon>
+              <ion-icon name="alert-circle-outline"></ion-icon>
             </div>
             <div class="stat-content">
-              <h3>{{ formatMinutesSeconds(memoryRecallDisplay.totalTimeSeconds) }}</h3>
-              <p>Recall Time Average</p>
+              <h3>{{ memoryRecallDisplay.falseSelections }}</h3>
+              <p>False Selections</p>
             </div>
           </div>
         </div>

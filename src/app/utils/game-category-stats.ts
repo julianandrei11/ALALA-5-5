@@ -154,7 +154,7 @@ export function buildGameCategoryStatsRows(sessions: any[]): any[] {
     const row = byName(catName);
     row.cardsPlayed = totalQuestions;
     row.accuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
-    row.avgTime = totalQuestions > 0 ? Math.round(totalTime / totalQuestions) : 0;
+    row.avgTime = totalQuestions > 0 ? Number((totalTime / totalQuestions).toFixed(1)) : 0;
   };
 
   /** One evaluation per game: use only the latest session (no cross-session sums). */
@@ -174,7 +174,7 @@ export function buildGameCategoryStatsRows(sessions: any[]): any[] {
     row.correctResponses = totalCorrect;
     row.totalItems = totalQuestions;
     row.cardsPlayed = totalQuestions;
-    row.avgTime = totalQuestions > 0 ? Math.round(totalTime / totalQuestions) : 0;
+    row.avgTime = totalQuestions > 0 ? Number((totalTime / totalQuestions).toFixed(1)) : 0;
   };
 
   /** Sum every session’s correct/total/time (fraction + weighted avg time). */
@@ -198,7 +198,7 @@ export function buildGameCategoryStatsRows(sessions: any[]): any[] {
     row.correctResponses = totalCorrect;
     row.totalItems = totalQuestions;
     row.cardsPlayed = totalQuestions;
-    row.avgTime = totalQuestions > 0 ? Math.round(totalTime / totalQuestions) : 0;
+    row.avgTime = totalQuestions > 0 ? Number((totalTime / totalQuestions).toFixed(1)) : 0;
   };
 
   /** Memory Recall: sum totals + compute delayed recall %, also track false selections + recall time. */
@@ -232,13 +232,13 @@ export function buildGameCategoryStatsRows(sessions: any[]): any[] {
     row.correctResponses = totalCorrect;
     row.totalItems = totalQuestions;
     row.cardsPlayed = totalQuestions;
-    row.avgTime = totalQuestions > 0 ? Math.round(totalTime / totalQuestions) : 0;
+    row.avgTime = totalQuestions > 0 ? Number((totalTime / totalQuestions).toFixed(1)) : 0;
 
     row.studySetSize = totalQuestions;
     row.recordCorrect = totalCorrect;
     row.recordTotal = totalQuestions;
     row.falseSelections = totalFalseSelections;
-    row.recallPhaseTime = Math.round(totalTime / Math.max(1, sArr.length));
+    row.recallPhaseTime = Number((totalTime / Math.max(1, sArr.length)).toFixed(1));
     row.delayedRecallPercent = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
   };
 
