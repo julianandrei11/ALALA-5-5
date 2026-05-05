@@ -16,14 +16,7 @@
       </div>
     </app-global-header>
   
-  <div class="loading-container" *ngIf="isLoading">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Loading your progress...</p>
-  </div>
-
-  
-  <div *ngIf="!isLoading">
-    <div class="cards-container">
+  <div class="cards-container">
       <div class="statistics-section">
         <div class="section-header-text">
           <h2>
@@ -105,7 +98,6 @@
         </div>
       </div>
     </div>
-  </div>
 
 
 <div class="caregiver-bottom-nav app-bottom-nav" *ngIf="!isPatientMode">

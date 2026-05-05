@@ -12,14 +12,7 @@
 <ion-content class="category-performance-screen" fullscreen>
   <div class="header-spacer"></div>
   
-  
-  <div *ngIf="isLoading" class="loading-container">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Loading performance data...</p>
-  </div>
-
-  
-  <div class="game-section" *ngIf="!isLoading">
+  <div class="game-section">
     <div class="section-header-text">
       <h2> Category Performance</h2>
       <p>Detailed performance metrics by category</p>

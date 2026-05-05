@@ -14,7 +14,7 @@ import { Location } from '@angular/common';
   standalone: false
 })
 export class CategoryPerformancePage implements OnInit {
-  isLoading = true;
+  isLoading = false;
   categoryStats: any[] = emptyCategoryStatsRows();
 
   readonly isRecordStatCategory = isRecordStatCategoryUtil;
@@ -25,8 +25,8 @@ export class CategoryPerformancePage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.loadCategoryStats();
-    this.isLoading = false;
+    // Render immediately; load data in background.
+    void this.loadCategoryStats();
   }
 
   async loadCategoryStats() {

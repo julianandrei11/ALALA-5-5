@@ -26,7 +26,7 @@ export class ProgressPage implements OnInit {
   
   chart: any;
   chartLoaded = false;
-  isLoading = true;
+  isLoading = false;
 
   isFirebaseConnected: boolean = false;
   dataSource: string = 'Loading...';
@@ -72,7 +72,8 @@ export class ProgressPage implements OnInit {
 
   async ngOnInit() {
     await this.loadChartJS();
-    await this.loadProgressData();
+    // Render immediately; load data in background.
+    void this.loadProgressData();
    
     // Charts are shown on the Statistics page now.
 
@@ -93,6 +94,11 @@ export class ProgressPage implements OnInit {
       }
       this.subscribeToGameSessions();
     });
+  }
+
+  ionViewWillEnter(): void {
+    // When navigating back to Progress (e.g., via tab), refresh the data automatically.
+    void this.loadProgressData();
   }
 
 
@@ -942,7 +948,7 @@ export class ProgressPage implements OnInit {
 
 
   async loadProgressData() {
-    this.isLoading = true;
+    this.isLoading = false;
     try {
       const sessions = await this.fetchGameSessions() || [];
       this.calculateOverallStats(sessions);
@@ -960,8 +966,6 @@ export class ProgressPage implements OnInit {
     } catch (error) {
       console.error('Error loading progress data:', error);
       this.dataSource = 'Error';
-    } finally {
-      this.isLoading = false;
     }
   }
 

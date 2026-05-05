@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
   standalone: false
 })
 export class RecentSessionsPage implements OnInit {
-  isLoading = true;
+  isLoading = false;
   recentSessions: any[] = [];
   selectedSession: any | null = null;
   isSessionModalOpen = false;
@@ -20,8 +20,8 @@ export class RecentSessionsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.loadRecentSessions();
-    this.isLoading = false;
+    // Render immediately; load data in background.
+    void this.loadRecentSessions();
   }
 
   async loadRecentSessions() {

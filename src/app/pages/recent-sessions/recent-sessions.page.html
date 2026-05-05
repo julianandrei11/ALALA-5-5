@@ -12,14 +12,7 @@
 <ion-content class="recent-sessions-screen" fullscreen>
   <div class="header-spacer"></div>
   
-  
-  <div *ngIf="isLoading" class="loading-container">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Loading session history...</p>
-  </div>
-
-  
-  <div class="game-section" *ngIf="!isLoading">
+  <div class="game-section">
     <div class="section-header-text">
       <h2> Recent Sessions</h2>
       <p>Your latest activity and performance</p>

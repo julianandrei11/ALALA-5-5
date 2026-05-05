@@ -59,7 +59,7 @@ export class GuessTheSilhouettesPage {
     { category: 'Household', answer: 'Window', imageAsset: 'assets/silhouettes/window.png' },
     { category: 'Household', answer: 'Lamp', imageAsset: 'assets/silhouettes/lamp.png' },
     { category: 'Household', answer: 'Refrigerator', imageAsset: 'assets/silhouettes/refrigerator.png' },
-    { category: 'Household', answer: 'Trash can', imageAsset: 'assets/silhouettes/trash-can.png' },
+    { category: 'Household', answer: 'Trash bin', imageAsset: 'assets/silhouettes/trash-bin.png' },
     { category: 'Household', answer: 'Broom', imageAsset: 'assets/silhouettes/broom.png' },
     // Tech
     { category: 'Tech', answer: 'Phone', imageAsset: 'assets/silhouettes/phone.png' },
