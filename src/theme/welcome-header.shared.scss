@@ -1,0 +1,79 @@
+// Shared shell for Home welcome card + app-global-header (same size, layout, spacing).
+// Back control: use auth-back-button-hero from auth-brand-shared.scss in global-header only.
+
+$app-welcome-header-below-gap: clamp(16px, 4vw, 22px);
+
+@mixin app-welcome-header-spacer {
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 8px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + clamp(14px, 4vw, 22px));
+  pointer-events: none;
+}
+
+@mixin app-welcome-header-card-surface {
+  border-radius: var(--app-radius-lg);
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(17, 24, 39, 0.06);
+  border: 1px solid rgba(17, 24, 39, 0.05);
+}
+
+@mixin app-welcome-header-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 4.5vw, 24px) clamp(18px, 4vw, 22px);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+@mixin app-welcome-header-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: clamp(12px, 3.5vw, 16px);
+}
+
+@mixin app-welcome-header-copy {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+@mixin app-welcome-header-title {
+  margin: 0 0 6px;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(1.25rem, 4.2vw, 1.45rem);
+  font-weight: 800;
+  color: var(--app-primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+@mixin app-welcome-header-subtitle {
+  margin: 0;
+  font-size: clamp(0.9rem, 3.2vw, 0.98rem);
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.45;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+@mixin app-welcome-header-avatar-ring {
+  flex-shrink: 0;
+  width: clamp(48px, 13vw, 56px);
+  height: clamp(48px, 13vw, 56px);
+  border-radius: 50%;
+  background: rgba(var(--app-primary-rgb), 0.12);
+  box-shadow: none;
+}

@@ -1,0 +1,133 @@
+// Shared auth flow (landing, login, signup): full-bleed hero image + overlay + brand typography.
+
+@mixin auth-hero-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+// Slight zoom + bias upward to crop bottom-right sparkles / edge art on the stock photo
+@mixin auth-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  transform: scale(1.16);
+  transform-origin: center center;
+}
+
+@mixin auth-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 41, 59, 0.12) 0%,
+    rgba(30, 41, 59, 0.28) 45%,
+    rgba(30, 41, 59, 0.62) 100%
+  );
+}
+
+// Horizontal inset for forms / actions (matches landing brand side padding)
+@mixin auth-flow-page-padding-x {
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+}
+
+@mixin auth-brand-logo-container {
+  margin-bottom: 15px;
+}
+
+@mixin auth-brand-logo-ring {
+  width: clamp(148px, 42vw, 188px);
+  height: clamp(148px, 42vw, 188px);
+  margin: 0 auto;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@mixin auth-brand-logo-image {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.28));
+}
+
+@mixin auth-brand-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2rem, 6.5vw, 2.625rem);
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.15;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+@mixin auth-brand-tagline {
+  font-family: 'Poppins', sans-serif;
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: clamp(0.8125rem, 3.2vw, 0.9375rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+@mixin auth-brand-section-spacing {
+  margin-bottom: 36px;
+}
+
+// Same top offset as landing brand (back button is absolute, does not push logo down)
+@mixin auth-brand-top-padding {
+  padding-top: max(16px, env(safe-area-inset-top));
+}
+
+// Headers / modals — back control: circular tap target (visible on light shells)
+@mixin auth-back-button-hero {
+  --background: rgba(255, 255, 255, 0.96);
+  --background-activated: rgba(var(--app-primary-rgb), 0.1);
+  --background-hover: rgba(255, 255, 255, 1);
+  --background-focused: rgba(255, 255, 255, 0.96);
+  --color: var(--app-primary);
+  --box-shadow: none;
+  --border-radius: 50%;
+  --border-width: 1.5px;
+  --border-style: solid;
+  --border-color: rgba(var(--app-primary-rgb), 0.22);
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  margin: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  ion-icon {
+    color: var(--app-primary);
+    font-size: 22px;
+  }
+}

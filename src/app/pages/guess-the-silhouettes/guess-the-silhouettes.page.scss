@@ -1,0 +1,191 @@
+.silhouettes-content {
+  --ion-background-color: var(--app-bg-1);
+  background: var(--app-bg-gradient);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  padding: 12px 20px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.93);
+  border-radius: 18px;
+  border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+  box-shadow: 0 10px 30px rgba(var(--app-primary-rgb), 0.12);
+  padding: 18px;
+}
+
+.panel-title {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--app-text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.panel-lead {
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #6b7280;
+  text-align: center;
+}
+
+.hint {
+  margin-top: 12px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.btn-grid {
+  display: grid;
+  gap: 12px;
+}
+
+ion-button.big-btn {
+  --border-radius: 999px;
+  --padding-top: 18px;
+  --padding-bottom: 18px;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: none;
+}
+
+ion-button.secondary {
+  --background: rgba(var(--app-primary-rgb), 0.12);
+  --color: var(--app-primary);
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.progress-chip {
+  align-self: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid rgba(var(--app-primary-rgb), 0.1);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+/* One flat grey for the whole preview (no gradient, no cream bleed-through). */
+.silhouette-stage {
+  --silhouette-panel-bg: #ced4dc;
+
+  align-self: center;
+  width: min(240px, 85vw);
+  height: min(240px, 85vw);
+  border-radius: 20px;
+  background: var(--silhouette-panel-bg);
+  border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Inner layer: same solid color only — isolates blend so the image does not pick up page gradients. */
+.silhouette-panel {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--silhouette-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.photo-silhouette {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  pointer-events: none;
+  filter: grayscale(1) contrast(1.4) brightness(0.92);
+  /* Darken blends white/light PNG areas down to the panel grey (uniform), unlike multiply vs gradient. */
+  mix-blend-mode: darken;
+}
+
+.emoji-silhouette {
+  font-size: clamp(72px, 26vw, 120px);
+  line-height: 1;
+  user-select: none;
+  /* Dark, silhouette-like readout while keeping shape cues */
+  filter: grayscale(1) contrast(1.2) brightness(0.28);
+}
+
+.silhouette-icon {
+  font-size: min(120px, 28vw);
+  color: #111827;
+  filter: contrast(1.15);
+}
+
+.feedback {
+  align-self: center;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: #6b7280;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.feedback.visible {
+  opacity: 1;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 8px;
+}
+
+ion-button.choice-btn {
+  --border-radius: 999px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+  --border-width: 0;
+  box-shadow: 0 2px 12px rgba(var(--app-primary-rgb), 0.18);
+  --color: var(--app-primary);
+}
+
+.result-stats {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.result-pill {
+  background: rgba(var(--app-primary-rgb), 0.1);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 16px;
+  color: var(--app-text);
+}

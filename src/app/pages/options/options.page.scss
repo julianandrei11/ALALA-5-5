@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap');
+
+.flashcard-games-screen {
+  --ion-background-color: transparent;
+  background: var(--app-bg-gradient);
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  min-height: 100vh;
+  padding: 12px 0 28px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(var(--app-primary-rgb), 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -2;
+    pointer-events: none;
+  }
+}
+
+.flashcard-games-screen .lavender-container.app-container {
+  padding-bottom: 32px !important;
+}
+
+.flashcard-games-screen .app-action-card .app-card-text {
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.flashcard-games-screen .flashcard-play-btn {
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--app-radius-md, 16px);
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.flashcard-games-screen .flashcard-play-btn ion-icon {
+  font-size: 18px;
+}
+
+@media (min-width: 768px) {
+  .flashcard-games-screen .app-action-cards {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

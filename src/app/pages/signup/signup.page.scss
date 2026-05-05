@@ -1,0 +1,466 @@
+@import '../../../theme/auth-brand-shared.scss';
+
+/* Full-screen role picker: uniform buttons, minimal copy */
+.signup-role-sheet {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  @include auth-flow-page-padding-x;
+  box-sizing: border-box;
+  z-index: 10000;
+  pointer-events: auto;
+}
+
+.signup-role-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72));
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+}
+
+.signup-role-sheet__card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: min(var(--app-modal-sheet-max-width, 400px), 100%);
+  margin: 0 auto;
+  padding: 22px 22px 20px;
+  border-radius: var(--app-modal-radius, 24px);
+  background: #ffffff;
+  box-shadow: none;
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38));
+  box-sizing: border-box;
+}
+
+/* Same row: back control vertically centered with title; symmetric columns keep title visually centered. */
+.signup-role-sheet__header {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  margin-bottom: 8px;
+  min-height: 44px;
+}
+
+.signup-role-sheet__back-btn {
+  grid-column: 1;
+  justify-self: start;
+  margin: 0;
+  @include auth-back-button-hero;
+}
+
+.signup-role-sheet__back-btn::part(native) {
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+}
+
+.signup-role-sheet__title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--app-primary);
+}
+
+.signup-role-sheet__subtitle {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.signup-role-sheet__hint {
+  margin: 0 0 22px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.signup-role-sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.signup-role-sheet__btn {
+  width: 100%;
+  height: 56px;
+  min-height: 56px;
+  margin: 0;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 999px;
+  background: var(--app-primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: none;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.signup-role-sheet__btn:active {
+  filter: brightness(0.94);
+  transform: scale(0.99);
+}
+
+.signup-role-sheet__login {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.signup-role-sheet__login-lead {
+  display: inline;
+  margin-right: 6px;
+}
+
+.signup-role-sheet__login-btn {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--app-primary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.signup-content {
+  --background: transparent;
+  font-family: 'Poppins', sans-serif;
+}
+
+.role-choice-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(30, 41, 59, 0.1);
+}
+
+.role-choice-summary__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(30, 41, 59, 0.88);
+}
+
+.role-choice-summary__label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(30, 41, 59, 0.55);
+  margin-bottom: 4px;
+}
+
+.role-choice-summary__value {
+  font-weight: 700;
+}
+
+.role-choice-summary__change {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(var(--app-primary-rgb), 0.15);
+  color: var(--app-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.account-type-hint {
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(30, 41, 59, 0.65);
+  margin: 0 0 16px;
+}
+
+.signup-container {
+  position: relative;
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0;
+  @include auth-flow-page-padding-x;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  gap: 0;
+}
+
+.auth-hero-bg {
+  @include auth-hero-wrap;
+}
+
+.auth-hero-img {
+  @include auth-hero-image;
+}
+
+.auth-hero-overlay {
+  @include auth-hero-overlay;
+}
+
+.signup-container.auth-with-hero .logo-section,
+.signup-container.auth-with-hero .signup-form {
+  position: relative;
+  z-index: 1;
+}
+
+.header-section {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(20px, env(safe-area-inset-left));
+  z-index: 2;
+  margin: 0;
+}
+
+.auth-with-hero .back-btn {
+  @include auth-back-button-hero;
+}
+
+.welcome-section {
+  flex-shrink: 0;
+  z-index: 10;
+  position: relative;
+  
+  .welcome-content {
+    background: linear-gradient(180deg, #ffffff 0%, #faf6ef 100%);
+    border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(var(--app-primary-rgb), 0.15);
+  }
+  
+  .welcome-icon {
+    background: linear-gradient(135deg, var(--app-primary), var(--app-primary));
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(var(--app-primary-rgb), 0.3);
+    
+    ion-icon {
+      color: white;
+      font-size: 24px;
+    }
+  }
+  
+  .welcome-text {
+    flex: 1;
+    min-width: 0;
+    
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--app-text);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    
+    p {
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0; 
+      font-weight: 500;
+    }
+  }
+}
+
+.logo-section {
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  @include auth-brand-top-padding;
+  @include auth-brand-section-spacing;
+
+  .app-logo-container {
+    @include auth-brand-logo-container;
+
+    .logo-ring {
+      @include auth-brand-logo-ring;
+
+      .app-logo-image {
+        @include auth-brand-logo-image;
+      }
+    }
+  }
+
+  .app-name {
+    @include auth-brand-title;
+  }
+
+  p.tagline {
+    @include auth-brand-tagline;
+  }
+}
+
+.signup-form {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  flex-shrink: 0;
+
+  .form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    h2 {
+      text-align: center;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 25px;
+      font-size: 22px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+
+      .custom-input {
+        --background: rgba(248, 249, 250, 0.8);
+        --border-radius: 16px;
+        --padding-start: 20px;
+        --padding-end: 20px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+
+        ion-icon {
+          color: var(--app-primary);
+          margin-right: 12px;
+        }
+
+        ion-input {
+          --color: #333;
+          --placeholder-color: #999;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .signup-btn {
+      --background: var(--app-primary);
+      --color: white;
+      --border-width: 0;
+      --border-radius: 999px;
+      min-height: 52px;
+      height: 52px;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px 0;
+      box-shadow: 0 8px 20px rgba(139, 157, 195, 0.3);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(139, 157, 195, 0.4);
+      }
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+
+      p {
+        color: #666;
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.signup-login-row {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 14px;
+  padding: 14px 18px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+
+  .login-link {
+    margin: 0;
+
+    p {
+      color: #666;
+      font-weight: 500;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+}
+
+.login-link__lead {
+  margin-right: 6px;
+  color: #64748b;
+}
+
+.login-link__action {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--app-primary);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

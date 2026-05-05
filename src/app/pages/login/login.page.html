@@ -1,0 +1,83 @@
+<ion-content class="login-content" fullscreen>
+  <div class="login-container app-container auth-with-hero">
+    <div class="auth-hero-bg" aria-hidden="true">
+      <img
+        src="assets/landing-welcome-bg.png"
+        alt=""
+        class="auth-hero-img"
+        decoding="async" />
+      <div class="auth-hero-overlay"></div>
+    </div>
+
+    <div class="header-section">
+      <ion-button fill="clear" class="back-btn" (click)="goToLanding()" aria-label="Back">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="logo-section">
+      <div class="app-logo-container">
+        <div class="logo-ring">
+          <img src="assets/ALALA_logo.png" alt="ALALA logo" class="app-logo-image" />
+        </div>
+      </div>
+      <h1 class="app-name">ALALA</h1>
+      <p class="tagline">Assistive Learning App for Loved Ones with Alzheimer's</p>
+    </div>
+
+    <div class="login-form">
+      <div class="form-container">
+        <h2>Welcome Back</h2>
+
+        <form class="auth-form" autocomplete="off" autocapitalize="off" novalidate>
+          <div class="input-group">
+            <ion-item class="custom-input">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-input
+                type="text"
+                inputmode="email"
+                placeholder="Email or contact number"
+                [(ngModel)]="email"
+                name="email"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Password"
+                [(ngModel)]="password"
+                name="password"
+                autocomplete="new-password">
+              </ion-input>
+            </ion-item>
+          </div>
+        </form>
+
+        <div class="forgot-row">
+          <ion-button fill="clear" size="small" (click)="onForgotPassword()">Forgot password?</ion-button>
+        </div>
+
+        <ion-button
+          expand="block"
+          class="login-btn"
+          (click)="login()"
+          [disabled]="isLoading">
+          <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+          <span *ngIf="!isLoading">Log In</span>
+          <span *ngIf="isLoading">Logging in...</span>
+          <ion-icon name="arrow-forward-outline" slot="end" *ngIf="!isLoading"></ion-icon>
+        </ion-button>
+
+        <p class="auth-switch-footer">
+          <span class="auth-switch-footer__muted">Don’t have an account yet?</span>
+          <button type="button" class="auth-switch-footer__link" (click)="goToSignup()">Sign up</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

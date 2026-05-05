@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar class="app-toolbar-purple">
+    <ion-buttons slot="start">
+      <ion-button fill="clear" color="light" (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light" class="header-title">Category Performance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="category-performance-screen" fullscreen>
+  <div class="header-spacer"></div>
+  
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading performance data...</p>
+  </div>
+
+  
+  <div class="game-section" *ngIf="!isLoading">
+    <div class="section-header-text">
+      <h2> Category Performance</h2>
+      <p>Detailed performance metrics by category</p>
+    </div>
+
+    <div class="category-grid">
+      <div class="category-card" *ngFor="let category of categoryStats">
+        <div class="category-header">
+          <span class="category-icon">{{ category.icon }}</span>
+          <h3>{{ category.name }}</h3>
+        </div>
+        <div class="category-stats" *ngIf="!isRecordStatCategory(category)">
+          <div class="stat-row">
+            <span>Accuracy:</span>
+            <span class="stat-value">{{ category.accuracy }}%</span>
+          </div>
+          <div class="stat-row">
+            <span>Cards Played:</span>
+            <span class="stat-value">{{ category.cardsPlayed }}</span>
+          </div>
+          <div class="stat-row">
+            <span>Avg Time:</span>
+            <span class="stat-value">{{ category.avgTime }}s</span>
+          </div>
+        </div>
+        <div class="category-stats category-stats--record" *ngIf="isRecordStatCategory(category)">
+          <div class="stat-row stat-row--record">
+            <span>Record:</span>
+            <span class="stat-value"
+              >{{ category.correctResponses ?? 0 }} / {{ category.totalItems ?? 0 }}</span
+            >
+          </div>
+          <p class="record-hint">Correct responses / items</p>
+          <div class="stat-row">
+            <span>Avg Time:</span>
+            <span class="stat-value">{{ category.avgTime }}s</span>
+          </div>
+        </div>
+        <div class="progress-bar" *ngIf="!isRecordStatCategory(category)">
+          <div class="progress-fill" [style.width.%]="category.accuracy"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="floating-elements">
+    <div class="floating-emoji emoji-1">
+      <ion-icon name="analytics-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-2">
+      <ion-icon name="trending-up-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-3">
+      <ion-icon name="star-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-4">
+      <ion-icon name="trophy-outline"></ion-icon>
+    </div>
+  </div>
+</ion-content>
+

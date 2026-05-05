@@ -1,0 +1,101 @@
+<ion-content class="mrc-content lavender-content" fullscreen [scrollY]="false">
+  <div class="container">
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="onBackTapped()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Memory Recall Challenge</h1>
+          <p class="app-header__subtitle">Calm memory practice, no pressure</p>
+        </div>
+      </div>
+    </app-global-header>
+
+    <div class="stage">
+    <!-- START (first load) -->
+    <div *ngIf="phase === 'study' && studyCards.length === 0" class="panel fade-in">
+      <h2 class="panel-title">Ready?</h2>
+      <p class="instruction">You will study 3 cards, then recall them calmly.</p>
+      <ion-button class="big-btn" expand="block" (click)="startNewRound()">Start</ion-button>
+    </div>
+
+    <!-- STUDY -->
+    <div *ngIf="phase === 'study' && studyCards.length > 0" class="panel fade-in">
+      <h2 class="panel-title">Study these cards</h2>
+      <p class="instruction">Study at your own pace, then tap Done 😊</p>
+      <div class="grid grid-study">
+        <div class="study-card" *ngFor="let e of studyCards">
+          <img class="mrc-face__img" [src]="e" alt="" decoding="async" />
+        </div>
+      </div>
+      <div class="btn-col">
+        <ion-button class="big-btn" expand="block" (click)="doneStudying()">Done</ion-button>
+      </div>
+    </div>
+
+    <!-- DISTRACTION — color match (calm, large targets) -->
+    <div *ngIf="phase === 'distraction'" class="panel panel--calm-task fade-in">
+      <h2 class="panel-title">Quick calm task</h2>
+      <p class="instruction instruction--calm">{{ distractionPrompt }}</p>
+
+      <div class="calm-reference-card" aria-hidden="true">
+        <div class="calm-reference-swatch" [style.background-color]="referenceColorHex"></div>
+      </div>
+
+      <div class="feedback feedback--calm" [class.visible]="!!feedbackMessage">{{ feedbackMessage || ' ' }}</div>
+
+      <div class="calm-swatches" role="group" aria-label="Pick the color that matches the large box above">
+        <button
+          type="button"
+          *ngFor="let c of calmColorOptions"
+          class="calm-swatch"
+          [class.calm-swatch--yellow]="c.id === 'yellow'"
+          [class.calm-swatch--wrong]="wrongHighlightId === c.id"
+          [style.background-color]="c.hex"
+          [attr.aria-label]="'Select ' + c.label"
+          (click)="onCalmColorPick(c.id)"
+          [disabled]="isBusy"></button>
+      </div>
+    </div>
+
+    <!-- RECALL -->
+    <div *ngIf="phase === 'recall'" class="panel fade-in">
+      <h2 class="panel-title">Which cards did you see earlier?</h2>
+      <p class="instruction">Select {{ studyCards.length }} cards only 😊</p>
+
+      <div class="feedback" [class.visible]="!!feedbackMessage">{{ feedbackMessage || ' ' }}</div>
+
+      <div class="grid grid-recall">
+        <button
+          type="button"
+          class="recall-card"
+          *ngFor="let c of recallCards"
+          (click)="toggleRecallCard(c.id)"
+          [class.selected]="c.isSelected"
+          [class.blocked]="isBusy">
+          <img class="mrc-face__img" [src]="c.emoji" alt="" decoding="async" />
+        </button>
+      </div>
+
+      <ion-button class="big-btn" expand="block" (click)="submitRecall()">
+        Submit
+      </ion-button>
+    </div>
+
+    <!-- RESULT -->
+    <div *ngIf="phase === 'result'" class="panel fade-in">
+      <h2 class="panel-title">Well done for trying 😊</h2>
+      <div class="btn-col">
+        <ion-button class="big-btn" expand="block" (click)="playAgain()">Play Again</ion-button>
+        <ion-button class="big-btn secondary" expand="block" (click)="backToBrainGames()">Back to Menu</ion-button>
+      </div>
+    </div>
+    </div>
+  </div>
+</ion-content>
+

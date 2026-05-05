@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import '../../../theme/auth-brand-shared.scss';
+
+.landing-content {
+  font-family: 'Poppins', sans-serif;
+  --background: transparent;
+}
+
+.landing-hero {
+  position: relative;
+  min-height: 100%;
+  min-height: 100dvh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.landing-bg {
+  @include auth-hero-image;
+}
+
+.landing-overlay {
+  @include auth-hero-overlay;
+}
+
+.landing-brand {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  @include auth-brand-top-padding;
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: 0;
+  @include auth-brand-section-spacing;
+
+  .app-logo-container {
+    @include auth-brand-logo-container;
+
+    .logo-ring {
+      @include auth-brand-logo-ring;
+
+      .app-logo-image {
+        @include auth-brand-logo-image;
+      }
+    }
+  }
+
+  .app-name {
+    @include auth-brand-title;
+  }
+
+  p.tagline {
+    @include auth-brand-tagline;
+  }
+}
+
+.landing-actions {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  width: 100%;
+  padding: 24px max(20px, env(safe-area-inset-left)) max(28px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.primary-action {
+  --background: var(--app-primary);
+  --border-width: 0;
+  --color: #ffffff;
+  --border-radius: 999px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+  box-shadow: 0 8px 20px rgba(139, 157, 195, 0.35);
+}
+
+.secondary-action {
+  --background: rgba(255, 255, 255, 0.96);
+  --color: var(--app-primary);
+  --border-radius: 999px;
+  --border-width: 0;
+  height: 56px;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}

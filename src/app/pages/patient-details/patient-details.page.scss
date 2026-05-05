@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.patient-details-screen {
+  --ion-background-color: transparent;
+  background: linear-gradient(135deg, #e8f2ff 0%, #f0f7ff 50%, #f8fbff 100%);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-top: 20px;
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #1e293b;
+    }
+
+    p {
+      font-size: 16px;
+      color: #64748b;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .form-section {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    .form-group {
+      margin-bottom: 22px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .input-item {
+        --background: #f8fafc;
+        --border-color: #e2e8f0;
+        --color: #1e293b;
+        --inner-padding-end: 0;
+        --inner-padding-start: 0;
+        --min-height: 52px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+
+        &:focus-within {
+          --border-color: #667eea;
+          border: 2px solid #667eea;
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        ion-icon {
+          color: #667eea;
+          margin-right: 8px;
+          font-size: 20px;
+        }
+
+        ion-input,
+        ion-select {
+          font-family: 'Inter', sans-serif;
+          font-size: 16px;
+          color: #1e293b;
+
+          &::placeholder {
+            color: #94a3b8;
+          }
+        }
+
+        ion-select {
+          flex: 1;
+          width: 100%;
+          max-width: 100%;
+          --padding-top: 0;
+          --padding-bottom: 0;
+          --padding-start: 0;
+          --padding-end: 0;
+        }
+
+        &.input-item--birthday {
+          align-items: center;
+
+          .birthday-text-input {
+            flex: 1;
+            min-width: 0;
+          }
+
+          .calendar-trigger {
+            --color: #667eea;
+            --padding-start: 4px;
+            --padding-end: 4px;
+            margin: 0;
+            flex-shrink: 0;
+
+            ion-icon {
+              font-size: 22px;
+            }
+          }
+        }
+
+        &.input-item--select ion-select {
+          --icon-color: #667eea;
+        }
+      }
+    }
+  }
+
+  .button-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+
+    ion-button {
+      --border-radius: 999px;
+      --padding-start: 24px;
+      --padding-end: 24px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+
+      &.save-button {
+        --background: linear-gradient(135deg, #8b9dc3 0%, #9bb5d1 100%);
+        --color: #ffffff;
+        box-shadow: 0 4px 16px rgba(139, 157, 195, 0.3);
+
+        &:hover:not([disabled]) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(139, 157, 195, 0.4);
+        }
+
+        &[disabled] {
+          opacity: 0.6;
+        }
+
+        ion-spinner {
+          margin-right: 8px;
+        }
+      }
+
+      &.back-button {
+        --border-color: #667eea;
+        --color: #667eea;
+        border: 2px solid #667eea;
+
+        &:hover:not([disabled]) {
+          background: rgba(102, 126, 234, 0.1);
+        }
+
+        &[disabled] {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+}
+
+
+.app-header ion-toolbar {
+  --background: linear-gradient(135deg, #c9a8f6 0%, #e8c9ff 100%);
+  --color: #1e293b;
+  --min-height: 64px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 0 8px;
+}
+
+.app-title {
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+
+@media (max-width: 480px) {
+  .patient-details-screen {
+    .container {
+      padding: 16px;
+      gap: 24px;
+    }
+
+    .header-section {
+      h1 {
+        font-size: 28px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    .form-section {
+      padding: 20px;
+    }
+  }
+}
+

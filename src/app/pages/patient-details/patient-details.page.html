@@ -1,0 +1,166 @@
+<ion-content class="lavender-content patient-details-screen">
+  <div class="container app-container">
+
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="onBackTapped()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">ALALA</h1>
+        </div>
+      </div>
+    </app-global-header>
+
+    <div class="header-section">
+      <h1>Patient Details</h1>
+      <p>Please provide information about the patient</p>
+    </div>
+
+    <div class="form-section">
+
+      <div class="form-group">
+        <label for="patientNickname">Display name</label>
+        <ion-item class="input-item" lines="none">
+          <ion-icon name="happy-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="patientNickname"
+            [(ngModel)]="patientNickname"
+            placeholder="Name shown on My Patients"
+            type="text"
+            clearInput
+            autocomplete="off"
+            autocorrect="off"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <label for="patientFirstName">First Name</label>
+        <ion-item class="input-item" lines="none">
+          <ion-icon name="person-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="patientFirstName"
+            [(ngModel)]="patientFirstName"
+            placeholder="Enter patient's first name"
+            type="text"
+            clearInput
+            autocomplete="off"
+            autocorrect="off"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <label for="patientLastName">Last Name</label>
+        <ion-item class="input-item" lines="none">
+          <ion-icon name="person-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="patientLastName"
+            [(ngModel)]="patientLastName"
+            placeholder="Enter patient's last name"
+            type="text"
+            clearInput
+            autocomplete="off"
+            autocorrect="off"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <label for="patientBirthdayInput">Birthday</label>
+        <ion-item class="input-item input-item--birthday" lines="none">
+          <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="patientBirthdayInput"
+            [(ngModel)]="birthdayDisplay"
+            (ionBlur)="onBirthdayManualBlur()"
+            placeholder="MM/DD/YYYY"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            autocorrect="off"
+            class="birthday-text-input"></ion-input>
+          <ion-button
+            slot="end"
+            fill="clear"
+            class="calendar-trigger"
+            type="button"
+            (click)="openBirthdayPopover($event)"
+            aria-label="Open calendar">
+            <ion-icon name="calendar-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </div>
+
+      <ion-popover
+        [isOpen]="birthdayPopoverOpen"
+        [event]="birthdayPopoverEvent"
+        (didDismiss)="onBirthdayPopoverDismiss()"
+        reference="event"
+        side="left"
+        alignment="center"
+        size="auto"
+        cssClass="compact-birthday-popover"
+        [arrow]="true"
+        [backdropDismiss]="true"
+        [dismissOnSelect]="false">
+        <ng-template>
+          <div class="compact-birthday-inner ion-padding">
+            <ion-datetime
+              presentation="date"
+              [(ngModel)]="patientBirthday"
+              [max]="maxBirthDate"
+              [min]="minBirthDate"
+              preferWheel="false"
+              firstDayOfWeek="0">
+            </ion-datetime>
+            <div class="compact-birthday-actions">
+              <ion-button fill="clear" size="small" (click)="closeBirthdayPopover()">Cancel</ion-button>
+              <ion-button size="small" (click)="confirmBirthdayPopover()">Done</ion-button>
+            </div>
+          </div>
+        </ng-template>
+      </ion-popover>
+
+      <div class="form-group">
+        <label for="patientSex">Sex</label>
+        <ion-item class="input-item input-item--select" lines="none">
+          <ion-icon name="person-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-select
+            id="patientSex"
+            [(ngModel)]="patientSex"
+            interface="popover"
+            placeholder="Select sex"
+            toggleIcon="chevron-down-outline"
+            expandedIcon="chevron-up-outline"
+            aria-label="Patient sex">
+            <ion-select-option value="Male">Male</ion-select-option>
+            <ion-select-option value="Female">Female</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+    </div>
+
+    <div class="button-section">
+      <ion-button
+        expand="block"
+        class="save-button"
+        (click)="savePatientDetails()"
+        [disabled]="isLoading">
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">SAVE & CONTINUE</span>
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="back-button"
+        (click)="goBack()"
+        [disabled]="isLoading">
+        BACK
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

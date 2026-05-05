@@ -1,0 +1,66 @@
+<ion-content class="lavender-content flashcard-games-screen" [scrollY]="true" fullscreen>
+
+  <div class="lavender-container app-container">
+
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" routerLink="/home">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Memory Games</h1>
+          <p class="app-header__subtitle">Choose your adventure</p>
+        </div>
+      </div>
+    </app-global-header>
+
+    <div class="app-cards">
+      <div class="app-card" (click)="selectCategory('people')">
+        <div class="app-card-icon">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">People</h2>
+          <p class="app-card-content__subtitle">Family & Friends</p>
+          <button type="button" class="flashcard-play-btn">
+            Play Now
+            <ion-icon name="play"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-card" (click)="selectCategory('places')">
+        <div class="app-card-icon">
+          <ion-icon name="location-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">Places</h2>
+          <p class="app-card-content__subtitle">Special Locations</p>
+          <button type="button" class="flashcard-play-btn">
+            Play Now
+            <ion-icon name="play"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-card" (click)="selectCategory('objects')">
+        <div class="app-card-icon">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">Objects</h2>
+          <p class="app-card-content__subtitle">Favorite Things</p>
+          <button type="button" class="flashcard-play-btn">
+            Play Now
+            <ion-icon name="play"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

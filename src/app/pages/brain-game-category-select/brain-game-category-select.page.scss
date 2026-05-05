@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import '../../../theme/brain-ui-shared.scss';
+
+ion-content.lavender-content.brain-game-category-content {
+  -webkit-text-size-adjust: 100%;
+}
+
+button.brain-game-row.bgcat-row {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.bgcat-subhead {
+  margin: 0;
+  font-size: clamp(1.05rem, 3.6vw, 1.2rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.bgcat-divider {
+  margin: 4px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5c5c5c;
+  text-align: center;
+}
+
+.bgcat-hint {
+  margin: 4px 0 0;
+  padding: 0 4px;
+  color: #5c5c5c;
+  font-size: clamp(0.88rem, 3vw, 0.95rem);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Title in row is a span — match h2 spacing from shared */
+.bgcat-row .brain-game-row__title {
+  display: block;
+}

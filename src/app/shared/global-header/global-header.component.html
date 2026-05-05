@@ -1,0 +1,16 @@
+<div class="app-page-header-root">
+  <div class="app-page-header-spacer" aria-hidden="true"></div>
+  <section class="app-page-header-card">
+    <div class="app-page-header-card__row">
+      <div class="app-page-header-card__main">
+        <ng-content select="[gh-left]"></ng-content>
+        <div class="app-page-header-card__copy">
+          <ng-content select="[gh-center]"></ng-content>
+        </div>
+      </div>
+      <div class="app-page-header-card__aside">
+        <ng-content select="[gh-right]"></ng-content>
+      </div>
+    </div>
+  </section>
+</div>

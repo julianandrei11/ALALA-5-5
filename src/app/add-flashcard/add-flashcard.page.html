@@ -1,0 +1,225 @@
+<ion-header>
+  <ion-toolbar class="lavender-header">
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()" fill="clear" aria-label="Back">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="lavender-title">{{ isEditMode ? 'Edit Flashcard' : 'Add Flashcard' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button 
+        (click)="saveFlashcard()" 
+        [disabled]="isSaving || !name || (!isEditMode && !image) || (activeTarget==='custom' && !selectedCustomCategoryId)"
+        fill="clear"
+        class="save-btn">
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="lavender-content" [scrollY]="true">
+  <div class="lavender-form">
+    
+    <div class="category-select-wrapper" *ngIf="fromCategoryMatch">
+      <ion-item class="lavender-item">
+        <ion-label>Category</ion-label>
+        <ion-select
+          interface="popover"
+          [(ngModel)]="selectedCategoryKey"
+          (ionChange)="onCategorySelectChange($event.detail.value)">
+          <ion-select-option
+            *ngFor="let opt of categorySelectOptions"
+            [value]="opt.key">
+            {{ opt.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="category-select-wrapper" *ngIf="activeTarget === 'builtin' && !fromCategoryMatch">
+      <ion-item class="lavender-item category-fixed">
+        <ion-label>Category</ion-label>
+        <ion-label slot="end" class="category-value">{{ category | titlecase }}</ion-label>
+      </ion-item>
+    </div>
+
+    
+    <div class="custom-categories-lavender" *ngIf="activeTarget === 'custom' && !fromCategoryMatch">
+      <div class="categories-title">Choose Category</div>
+      <div class="categories-grid">
+        <div 
+          *ngFor="let c of customCategories"
+          [class.selected]="selectedCustomCategoryId === c.id"
+          (click)="selectCustomCategory(c.id)"
+          class="category-card">
+          <div class="card-icon">{{ c.emoji || '' }}</div>
+          <div class="card-name">{{ c.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="input-card">
+      <div class="card-header">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Name</span>
+      </div>
+      <ion-item class="lavender-item">
+        <ion-input [(ngModel)]="name" placeholder="Enter name..." required></ion-input>
+      </ion-item>
+    </div>
+
+    
+    <div class="photo-card">
+      <div class="card-header">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Photo</span>
+      </div>
+      
+      <div class="photo-container-lavender">
+        <div class="photo-frame-lavender" [class.has-image]="image" (click)="image ? null : takePhoto()">
+          <ng-container *ngIf="image; else photoPlaceholderLavender">
+            <img [src]="image" alt="Preview" class="photo-preview-lavender" />
+            <div class="photo-overlay-lavender">
+              <div class="overlay-actions">
+                <ion-button fill="clear" size="small" (click)="takePhoto()" class="overlay-btn">
+                  <ion-icon name="camera-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" (click)="selectImage()" class="overlay-btn">
+                  <ion-icon name="image-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #photoPlaceholderLavender>
+            <div class="photo-placeholder-lavender">
+              <div class="placeholder-icon">
+                <ion-icon name="camera-outline"></ion-icon>
+              </div>
+              <div class="placeholder-text">
+                <span class="main-text">Tap to add photo</span>
+                <span class="sub-text">Camera or Gallery</span>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      
+      <div class="photo-actions-lavender">
+        <ion-button expand="block" fill="outline" (click)="takePhoto()" class="action-btn camera-btn">
+          <ion-icon slot="start" name="camera"></ion-icon>
+          Camera
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="selectImage()" class="action-btn gallery-btn">
+          <ion-icon slot="start" name="image"></ion-icon>
+          Gallery
+        </ion-button>
+      </div>
+    </div>
+
+    
+    <div class="audio-card">
+      <div class="card-header">
+        <ion-icon name="mic-outline"></ion-icon>
+        <span>Voice Recording</span>
+      </div>
+      
+      <div class="audio-controls-lavender">
+        <ion-button 
+          expand="block"
+          class="record-button-lavender"
+          [class.recording]="isRecording"
+          (click)="recordAudio()"
+          fill="outline">
+          <ion-icon slot="start" [name]="isRecording ? 'stop' : 'mic'"></ion-icon>
+          {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+        </ion-button>
+        
+        <ion-button 
+          expand="block"
+          fill="outline" 
+          (click)="selectAudio()"
+          *ngIf="!isRecording"
+          class="upload-btn">
+          <ion-icon slot="start" name="musical-notes"></ion-icon>
+          Upload Audio
+        </ion-button>
+      </div>
+
+      <div class="recording-status" *ngIf="isRecording">
+        <div class="recording-indicator">
+          <div class="pulse-dot"></div>
+          <span class="recording-text">Recording...</span>
+        </div>
+        <div class="timer-display">
+          <ion-icon name="time-outline"></ion-icon>
+          <span class="timer-text">{{ recordingTime }}</span>
+        </div>
+      </div>
+
+      
+      <div class="audio-player-lavender" *ngIf="audio && !isRecording">
+        <div class="player-header-lavender">
+          <div class="player-info">
+            <ion-icon name="headset-outline"></ion-icon>
+            <span>Audio Preview</span>
+          </div>
+          <ion-button fill="clear" size="small" (click)="removeAudio()" class="delete-btn">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+        
+        <div class="player-controls-lavender">
+          <ion-button 
+            fill="clear" 
+            (click)="togglePlayback()"
+            class="play-btn">
+            <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
+          </ion-button>
+          <div class="audio-progress">
+            <div class="time-info">
+              <span>{{ formatTime(currentTime) }}</span>
+              <span>{{ formatTime(audioDuration) }}</span>
+            </div>
+            <ion-range
+              min="0"
+              [max]="audioDuration"
+              [value]="currentTime"
+              (ionChange)="seekAudio($event)"
+              step="0.01"
+              color="primary"
+              class="audio-range-lavender">
+            </ion-range>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="save-section">
+      <ion-button 
+        expand="block" 
+        class="save-flashcard-btn"
+        (click)="saveFlashcard()" 
+        [disabled]="isSaving || !name || (!isEditMode && !image) || (activeTarget==='custom' && !selectedCustomCategoryId)">
+        <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+        {{ isSaving ? 'Saving...' : 'Save Flashcard' }}
+      </ion-button>
+    </div>
+
+    
+    <audio
+      #audioPlayer
+      [src]="audio"
+      preload="metadata"
+      (loadedmetadata)="onAudioLoaded()"
+      (timeupdate)="onTimeUpdate()"
+      (ended)="onAudioEnded()"
+      (pause)="onAudioPause()"
+      (play)="onAudioPlay()"
+      style="display: none;">
+    </audio>
+
+  </div>
+</ion-content>

@@ -1,0 +1,82 @@
+/* Ionic Variables and Global Theme — ALALA design system (Home-based) */
+
+:root {
+  /* Core palette — Brain Games hero + bottom nav (#6A2E91) */
+  --app-primary: #6a2e91;
+  --app-primary-rgb: 106, 46, 145;
+  --app-primary-dark: #542476;
+  --app-primary-dark-rgb: 84, 36, 118;
+  --app-primary-tint: #8a4bad;
+  --app-primary-shade: #5e2a82;
+
+  --app-surface: #ffffff;
+  --app-text: #542476;
+  --app-muted: #6b5578;
+
+  /* Light shells only — no heavy or “fade to dark” bottom wash */
+  --app-bg-1: #faf7f4;
+  --app-bg-2: #f5f1ec;
+  --app-bg-3: #efeae4;
+  --app-bg-gradient: linear-gradient(180deg, #fdfcfa 0%, #faf7f4 50%, #f4efe8 100%);
+
+  /*
+   * Full-page shell (Home + global ion-content): soft lilac haze, stays bright to the bottom.
+   * Radials kept very low alpha so nothing reads as a dark vignette.
+   */
+  --app-home-atmosphere-bg:
+    radial-gradient(ellipse 120% 80% at 100% 0%, rgba(var(--app-primary-rgb), 0.08), transparent 58%),
+    radial-gradient(ellipse 90% 70% at 0% 100%, rgba(var(--app-primary-rgb), 0.045), transparent 52%),
+    linear-gradient(
+      168deg,
+      #ffffff 0%,
+      #f9f7fc 40%,
+      #f4f1f9 78%,
+      #f0ebf6 100%
+    );
+
+  /* Primary surfaces (cards / CTAs) */
+  --app-gradient-button: linear-gradient(180deg, #8a4bad 0%, #5e2a82 100%);
+  --app-gradient-button-hover: linear-gradient(180deg, #9654b8 0%, #6a2e91 100%);
+  --app-gradient-nav: linear-gradient(180deg, #6a2e91 0%, #542476 100%);
+
+  --app-shadow-soft: 0 10px 28px rgba(var(--app-primary-rgb), 0.18);
+  --app-shadow-card: 0 8px 24px rgba(var(--app-primary-rgb), 0.12);
+  --app-radius-lg: 24px;
+  --app-radius-md: 20px;
+  --app-radius-sm: 14px;
+
+  /* Modal / overlay: frosted scrim + blur (see global ion-backdrop / .detail-overlay) */
+  --app-modal-backdrop-fill: rgba(252, 250, 255, 0.72);
+  --app-overlay: var(--app-modal-backdrop-fill);
+  --app-overlay-blur: 12px;
+  /* Sheet width — “New Category” / patient details style (wider than old 320px) */
+  --app-modal-sheet-max-width: 400px;
+  --app-modal-backdrop-blur: 20px;
+  /* Visible edge on frosted backdrops (all modal sheets) */
+  --app-modal-outline: 1.5px solid rgba(var(--app-primary-rgb), 0.38);
+  /* Full-opacity backdrop; tint comes from --app-modal-backdrop-fill on ion-backdrop / ::part(backdrop) */
+  --app-modal-scrim-opacity: 1;
+  /* Backdrop blur strength for all overlays */
+  --app-modal-backdrop-blur: 26px;
+
+  /* App-wide pill buttons (Cancel / primary CTAs) */
+  --app-button-pill-radius: 999px;
+  --app-button-min-height: 44px;
+  --app-button-font-size: 14px;
+  --app-button-font-weight: 600;
+  /* Modal panels — solid white (match “New Category” sheet) */
+  --app-modal-bg: #ffffff;
+  --app-modal-radius: 24px;
+  --app-modal-shadow: none;
+
+  /* Ionic color system */
+  --ion-color-primary: var(--app-primary);
+  --ion-color-primary-rgb: 106, 46, 145;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5e2a82;
+  --ion-color-primary-tint: #8a4bad;
+
+  --ion-background-color: var(--app-bg-1);
+  --ion-text-color: var(--app-text);
+}

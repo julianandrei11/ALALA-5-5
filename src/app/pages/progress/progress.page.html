@@ -1,0 +1,163 @@
+<ion-content class="lavender-content progress-screen">
+  <div class="lavender-container app-container">
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="goBack()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Progress</h1>
+          <p class="app-header__subtitle">Your magical memory companion</p>
+        </div>
+      </div>
+    </app-global-header>
+  
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading your progress...</p>
+  </div>
+
+  
+  <div *ngIf="!isLoading">
+    <div class="cards-container">
+      <div class="statistics-section">
+        <div class="section-header-text">
+          <h2>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Statistics
+          </h2>
+        </div>
+        
+        <div class="statistics-button-container">
+          <div
+            class="statistics-card"
+            routerLink="/statistics">
+            <div class="card-glow"></div>
+            <div class="card-content">
+              <div class="statistics-icon">
+                <ion-icon name="stats-chart-outline"></ion-icon>
+              </div>
+              <h3>View Statistics</h3>
+              <p>See your accuracy, time, and progress charts</p>
+              <div class="play-button">
+                <ion-icon name="stats-chart-outline"></ion-icon>
+                View Details
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="category-section">
+        <div class="section-header-text">
+          <h2>
+            <ion-icon name="analytics-outline"></ion-icon>
+            Category Performance
+          </h2>
+        </div>
+        
+        <div class="category-performance-button-container">
+          <div class="category-performance-card" routerLink="/category-performance">
+            <div class="card-glow"></div>
+            <div class="card-content">
+              <div class="category-performance-icon">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+              <h3>Performance by Category</h3>
+              <p>View detailed analytics and insights</p>
+              <div class="play-button">
+                <ion-icon name="analytics"></ion-icon>
+                View Details
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="session-section">
+        <div class="section-header-text">
+          <h2>
+            <ion-icon name="calendar-outline"></ion-icon>
+            Recent Sessions
+          </h2>
+        </div>
+        
+        <div class="recent-sessions-button-container">
+          <div class="recent-sessions-card" routerLink="/recent-sessions">
+            <div class="card-glow"></div>
+            <div class="card-content">
+              <div class="recent-sessions-icon">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+              <h3>Session History</h3>
+              <p>Review your recent activity</p>
+              <div class="play-button">
+                <ion-icon name="time"></ion-icon>
+                View History
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="caregiver-bottom-nav app-bottom-nav" *ngIf="!isPatientMode">
+  <div class="nav-container app-bottom-nav__inner">
+
+    <div class="nav-item app-bottom-nav__item" (click)="navigateToHome()">
+      <div class="nav-icon home-icon app-bottom-nav__icon">
+        <ion-icon name="home"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Home</span>
+    </div>
+
+    <div class="nav-item active app-bottom-nav__item app-bottom-nav__item--active">
+      <div class="nav-icon progress-icon app-bottom-nav__icon">
+        <ion-icon name="trending-up-outline"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Progress</span>
+    </div>
+
+    <div class="nav-item caregiver-mode app-bottom-nav__item" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon app-bottom-nav__icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Caregiver</span>
+    </div>
+
+    <div class="nav-item app-bottom-nav__item" (click)="navigateToSettings()">
+      <div class="nav-icon app-bottom-nav__icon">
+        <ion-icon name="settings-outline"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Settings</span>
+    </div>
+
+    <div class="nav-item app-bottom-nav__item" (click)="navigateToPatientsDashboard()">
+      <div class="nav-icon app-bottom-nav__icon">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Patients</span>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="patient-bottom-nav app-bottom-nav" *ngIf="isPatientMode">
+  <div class="nav-container app-bottom-nav__inner">
+    <div class="nav-item caregiver-mode active app-bottom-nav__item" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon app-bottom-nav__icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label app-bottom-nav__label">Caregiver</span>
+    </div>
+  </div>
+</div>
+

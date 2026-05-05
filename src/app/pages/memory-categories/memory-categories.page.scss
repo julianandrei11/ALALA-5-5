@@ -1,0 +1,574 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.lavender-content {
+  --ion-background-color: var(--app-bg-1);
+  --ion-text-color: var(--app-text);
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  background: var(--app-bg-gradient);
+  overflow-x: hidden !important;
+}
+
+.lavender-header {
+  --background: linear-gradient(135deg, var(--app-primary) 0%, var(--app-primary) 50%, var(--app-primary) 100%);
+  --color: white;
+  --border-width: 0;
+  box-shadow: 0 4px 20px rgba(var(--app-primary-rgb), 0.3);
+  
+  .lavender-title {
+    font-weight: 600;
+  font-size: 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  ion-button {
+    --color: white;
+    --background: rgba(255,255,255,0.1);
+    --border-radius: 999px;
+    --border-width: 0;
+    margin: 0 4px;
+    transition: none;
+    
+    &:hover {
+      --background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+  }
+}
+
+.lavender-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+  padding: 16px;
+  gap: 20px;
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
+
+
+.welcome-section {
+  flex-shrink: 0;
+  
+  .welcome-content {
+    background: linear-gradient(180deg, #ffffff 0%, #faf6ef 100%);
+    border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start;
+    gap: 10px;
+    box-shadow: 0 4px 16px rgba(var(--app-primary-rgb), 0.15);
+    min-height: auto;
+    flex-wrap: nowrap !important;
+  }
+  
+  ion-buttons {
+    margin: 0;
+    order: 1;
+  }
+  
+  .back-btn {
+    --color: var(--app-primary);
+    --background: transparent;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    flex-shrink: 0;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 22px;
+      color: var(--app-primary);
+    }
+  }
+  
+  .welcome-icon {
+    background: linear-gradient(135deg, var(--app-primary), var(--app-primary));
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(var(--app-primary-rgb), 0.3);
+    order: 2;
+    
+    ion-icon {
+      color: white;
+      font-size: 18px;
+    }
+  }
+  
+  .welcome-text {
+    flex: 1;
+    min-width: 0;
+    order: 3;
+    
+    h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--app-text);
+      margin: 0 0 2px 0;
+      line-height: 1.2;
+    }
+    
+    p {
+      font-size: 11px;
+      color: #6b7280;
+      margin: 0; 
+      font-weight: 500;
+    }
+  }
+  
+  .settings-btn {
+    --color: var(--app-primary);
+    --background: transparent;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    flex-shrink: 0;
+    margin: 0;
+    order: 4;
+    
+    ion-icon {
+      font-size: 28px;
+      color: var(--app-primary);
+    }
+  }
+  
+  .add-category-btn {
+    --color: var(--app-primary);
+    --background: transparent;
+    --background-hover: rgba(var(--app-primary-rgb), 0.1);
+    --padding-start: 4px;
+    --padding-end: 4px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    flex-shrink: 0;
+    margin: 0;
+    order: 4;
+    
+    ion-icon {
+      font-size: 28px;
+      color: var(--app-primary);
+    }
+  }
+}
+
+
+/* Main Actions - Large Interactive Cards */
+.main-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.action-card {
+  position: relative;
+  background: linear-gradient(135deg, var(--app-primary) 0%, var(--app-primary) 100%);
+  color: white;
+  border-radius: 18px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(var(--app-primary-rgb), 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  width: 100%;
+  min-height: 100px;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:active::before {
+    opacity: 1;
+  }
+}
+
+.action-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+
+  ion-icon {
+    font-size: 26px;
+    color: white;
+  }
+}
+
+.action-text {
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 4px 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.action-card:hover .card-glow {
+  opacity: 1;
+}
+
+/* Custom category row — actions sit in column at end of purple card */
+.app-action-card.custom-action .card-actions {
+  position: static;
+  z-index: 3;
+}
+
+
+@media (max-width: 768px) {
+  .main-actions {
+    gap: 12px;
+  }
+
+  .lavender-container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .welcome-content {
+    padding: 16px;
+
+    .welcome-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+
+    .welcome-text h1 {
+      font-size: 18px;
+    }
+
+    .welcome-text p {
+      font-size: 13px;
+    }
+  }
+
+  .action-card {
+    padding: 24px 20px;
+    min-height: 120px;
+  }
+
+  .action-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 12px;
+
+    ion-icon {
+      font-size: 28px;
+    }
+  }
+
+  .action-text {
+    h2 {
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .lavender-container {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .welcome-content {
+    padding: 12px;
+
+    .welcome-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+
+    .welcome-text h1 {
+      font-size: 16px;
+    }
+
+    .welcome-text p {
+      font-size: 12px;
+    }
+  }
+
+  .action-card {
+    padding: 20px 16px;
+    min-height: 100px;
+  }
+
+  .action-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+
+  .action-text {
+    h2 {
+      font-size: 18px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+  }
+}
+
+/* Scrollbar Styling */
+.main-actions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-actions::-webkit-scrollbar-track {
+  background: rgba(var(--app-primary-rgb), 0.1);
+  border-radius: 3px;
+}
+
+.main-actions::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary));
+  border-radius: 3px;
+}
+
+.main-actions::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary));
+}
+
+
+// Modal overlay — signup-style: frosted scrim + solid white card (no gray glass)
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72));
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: min(var(--app-modal-sheet-max-width, 400px), 100%);
+  padding: 28px 22px 22px;
+  border-radius: var(--app-modal-radius, 24px);
+  background: #ffffff;
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38));
+  outline: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--app-primary);
+  z-index: 2;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--app-primary);
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 8px 0 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    line-height: 1.55;
+  }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--app-primary);
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.5px solid rgba(var(--app-primary-rgb), 0.2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+
+  ion-icon {
+    font-size: 20px;
+    color: var(--app-primary);
+    flex-shrink: 0;
+  }
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: var(--app-text);
+    font-family: inherit;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--app-button-pill-radius, 999px);
+  background: var(--app-gradient-button);
+  color: white;
+  font-size: var(--app-button-font-size, 15px);
+  font-weight: var(--app-button-font-weight, 700);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: var(--app-button-min-height, 44px);
+  transition: filter 0.15s ease, transform 0.1s ease;
+
+  &:hover {
+    filter: brightness(1.03);
+  }
+
+  &:active {
+    transform: scale(0.99);
+    filter: brightness(0.96);
+  }
+}
+
+.back-button {
+  width: 100%;
+  padding: 14px 24px;
+  border: 1.5px solid rgba(var(--app-primary-rgb), 0.38);
+  border-radius: var(--app-button-pill-radius, 999px);
+  background: #ffffff;
+  color: var(--app-primary);
+  font-size: var(--app-button-font-size, 15px);
+  font-weight: var(--app-button-font-weight, 700);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: var(--app-button-min-height, 44px);
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: rgba(var(--app-primary-rgb), 0.06);
+    border-color: var(--app-primary);
+  }
+}

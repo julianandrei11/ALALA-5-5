@@ -1,0 +1,195 @@
+<ion-content class="signup-content" fullscreen>
+  <div
+    slot="fixed"
+    class="signup-role-sheet"
+    *ngIf="accountRole === null"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="signup-role-title">
+    <div class="signup-role-sheet__backdrop" aria-hidden="true"></div>
+    <div class="signup-role-sheet__card">
+      <div class="signup-role-sheet__header">
+        <ion-button
+          fill="clear"
+          class="signup-role-sheet__back-btn"
+          (click)="goToLanding()"
+          aria-label="Back">
+          <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <h2 id="signup-role-title" class="signup-role-sheet__title">Create account</h2>
+      </div>
+      <p class="signup-role-sheet__subtitle">Choose your account type</p>
+      <div class="signup-role-sheet__actions">
+        <button type="button" class="signup-role-sheet__btn" (click)="pickAccountRole('caregiver')">
+          Caregiver
+        </button>
+        <button type="button" class="signup-role-sheet__btn" (click)="pickAccountRole('family_member')">
+          Trusted family
+        </button>
+      </div>
+      <p class="signup-role-sheet__login">
+        <span class="signup-role-sheet__login-lead">Already have an account?</span>
+        <button type="button" class="signup-role-sheet__login-btn" (click)="goToLogin()">Log in</button>
+      </p>
+    </div>
+  </div>
+
+  <div class="signup-container app-container auth-with-hero">
+    <div class="auth-hero-bg" aria-hidden="true">
+      <img
+        src="assets/landing-welcome-bg.png"
+        alt=""
+        class="auth-hero-img"
+        decoding="async" />
+      <div class="auth-hero-overlay"></div>
+    </div>
+
+    <div class="header-section">
+      <ion-button
+        fill="clear"
+        class="back-btn"
+        (click)="goToLanding()"
+        aria-label="Back">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="logo-section">
+      <div class="app-logo-container">
+        <div class="logo-ring">
+          <img src="assets/ALALA_logo.png" alt="ALALA logo" class="app-logo-image" />
+        </div>
+      </div>
+      <h1 class="app-name">ALALA</h1>
+      <p class="tagline">Assistive Learning App for Loved Ones with Alzheimer's</p>
+    </div>
+
+    <div class="signup-form" *ngIf="accountRole !== null">
+      <div class="form-container">
+        <h2>{{ accountRole === 'caregiver' ? 'Caregiver account' : 'Trusted family account' }}</h2>
+
+        <div class="role-choice-summary" aria-live="polite">
+          <p class="role-choice-summary__text">
+            <span class="role-choice-summary__label">Account type</span>
+            <strong class="role-choice-summary__value">{{
+              accountRole === 'caregiver' ? 'Caregiver' : 'Trusted family'
+            }}</strong>
+          </p>
+          <button type="button" class="role-choice-summary__change" (click)="changeAccountType()">
+            Change
+          </button>
+        </div>
+
+        <p class="account-type-hint" *ngIf="accountRole === 'caregiver'">Patients &amp; invites.</p>
+        <p class="account-type-hint" *ngIf="accountRole === 'family_member'">Accept access only.</p>
+
+        <form class="auth-form" autocomplete="off" novalidate>
+          <div class="input-group">
+            <ion-item class="custom-input">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-input
+                type="email"
+                inputmode="email"
+                placeholder="Email"
+                [(ngModel)]="email"
+                name="email"
+                autocomplete="email"
+                autocorrect="off"
+                spellcheck="false">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-input
+                type="text"
+                placeholder="Last name"
+                [(ngModel)]="lastName"
+                name="lastName"
+                autocomplete="family-name"
+                autocorrect="off"
+                spellcheck="false">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-input
+                type="text"
+                placeholder="First name"
+                [(ngModel)]="firstName"
+                name="firstName"
+                autocomplete="given-name"
+                autocorrect="off"
+                spellcheck="false">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="call-outline" slot="start"></ion-icon>
+              <ion-input
+                type="tel"
+                inputmode="tel"
+                placeholder="Contact number"
+                [(ngModel)]="phoneNumber"
+                name="phoneNumber"
+                autocomplete="off">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Password"
+                [(ngModel)]="password"
+                name="password"
+                autocomplete="new-password">
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="custom-input">
+              <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Confirm password"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                autocomplete="new-password">
+              </ion-input>
+            </ion-item>
+          </div>
+        </form>
+
+        <ion-button
+          expand="block"
+          class="signup-btn"
+          (click)="signup()"
+          [disabled]="
+            isLoading ||
+            accountRole === null ||
+            !email ||
+            !lastName ||
+            !firstName ||
+            !phoneNumber ||
+            !password ||
+            !confirmPassword
+          ">
+          <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading">Creating Account...</span>
+          <ion-icon name="rocket-outline" slot="end" *ngIf="!isLoading"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="form-container signup-login-row" *ngIf="accountRole !== null">
+      <div class="login-link">
+        <p>
+          <span class="login-link__lead">Already have an account?</span>
+          <button type="button" class="login-link__action" (click)="goToLogin()">Log in</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

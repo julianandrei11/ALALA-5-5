@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar class="app-toolbar-purple">
+    <ion-buttons slot="start">
+      <ion-button fill="clear" color="light" (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light" class="header-title">Recent Sessions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="recent-sessions-screen" fullscreen>
+  <div class="header-spacer"></div>
+  
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading session history...</p>
+  </div>
+
+  
+  <div class="game-section" *ngIf="!isLoading">
+    <div class="section-header-text">
+      <h2> Recent Sessions</h2>
+      <p>Your latest activity and performance</p>
+    </div>
+
+    <div class="session-list" *ngIf="recentSessions.length > 0">
+      <div class="session-item" *ngFor="let session of recentSessions">
+        <div class="session-date">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ session.date | date:'M/d/yy, h:mm a' }}</span>
+        </div>
+        <div class="session-details">
+          <div class="session-stat">
+            <span>{{ session.category || 'Unknown Category' }}</span>
+            <span class="accuracy-badge" [class]="getAccuracyClass(session.accuracy)">
+              {{ session.accuracy }}%
+            </span>
+          </div>
+          <div class="session-meta">
+            {{ session.correctAnswers || 0 }}/{{ session.totalQuestions || 0 }} correct •
+            {{ session.duration }}min •
+            {{ session.skippedCards || 0 }} skipped
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-sessions-message" *ngIf="recentSessions.length === 0">
+      <ion-icon name="school-outline"></ion-icon>
+      <h3>No Quiz Sessions Yet</h3>
+      <p>Take some quizzes to see your recent session history here!</p>
+      <ion-button routerLink="/home" fill="solid" color="primary">
+        <ion-icon name="play" slot="start"></ion-icon>
+        Start a Quiz
+      </ion-button>
+    </div>
+  </div>
+
+  
+  <div class="floating-elements">
+    <div class="floating-emoji emoji-1">
+      <ion-icon name="time-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-2">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-3">
+      <ion-icon name="star-outline"></ion-icon>
+    </div>
+    <div class="floating-emoji emoji-4">
+      <ion-icon name="trophy-outline"></ion-icon>
+    </div>
+  </div>
+</ion-content>
+

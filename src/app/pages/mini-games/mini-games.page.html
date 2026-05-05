@@ -1,0 +1,69 @@
+<ion-content class="lavender-content mini-games-screen" [scrollY]="true" fullscreen>
+
+  <div class="lavender-container app-container">
+
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" routerLink="/home">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Mini Games</h1>
+          <p class="app-header__subtitle">Choose your brain exercise</p>
+        </div>
+      </div>
+    </app-global-header>
+
+    <div class="app-cards">
+      <div class="app-card" routerLink="/memory-matching">
+        <div class="app-card-icon">
+          <ion-icon name="grid-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">Memory Matching</h2>
+          <p class="app-card-content__subtitle">Match pairs of cards</p>
+          <span class="difficulty-badge easy">Easy</span>
+          <button type="button" class="play-button">
+            <ion-icon name="play"></ion-icon>
+            Play Now
+          </button>
+        </div>
+      </div>
+
+      <div class="app-card" routerLink="/color-sequence">
+        <div class="app-card-icon">
+          <ion-icon name="color-palette-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">Color Sequence</h2>
+          <p class="app-card-content__subtitle">Remember the pattern</p>
+          <span class="difficulty-badge medium">Medium</span>
+          <button type="button" class="play-button">
+            <ion-icon name="play"></ion-icon>
+            Play Now
+          </button>
+        </div>
+      </div>
+
+      <div class="app-card" routerLink="/word-association">
+        <div class="app-card-icon">
+          <ion-icon name="text-outline"></ion-icon>
+        </div>
+        <div class="app-card-content">
+          <h2 class="app-card-content__title">Word Association</h2>
+          <p class="app-card-content__subtitle">Connect related words</p>
+          <span class="difficulty-badge easy">Easy</span>
+          <button type="button" class="play-button">
+            <ion-icon name="play"></ion-icon>
+            Play Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

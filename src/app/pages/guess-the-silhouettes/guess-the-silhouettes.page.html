@@ -1,0 +1,71 @@
+<ion-content class="silhouettes-content" [scrollY]="false" fullscreen>
+  <div class="container">
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="onBackTapped()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Guess the Silhouettes</h1>
+          <p class="app-header__subtitle">Identify objects from their outlines</p>
+        </div>
+      </div>
+    </app-global-header>
+
+    <div *ngIf="screen === 'menu'" class="panel">
+      <h2 class="panel-title">Ready to play?</h2>
+      <p class="panel-lead">You will see {{ roundCount }} photos shown as dark silhouettes. Pick the word that best matches each one.</p>
+      <div class="btn-grid">
+        <ion-button class="big-btn" expand="block" (click)="startGame()">Start</ion-button>
+      </div>
+      <div class="hint">Take your time. There is no timer.</div>
+    </div>
+
+    <div *ngIf="screen === 'game' && currentRound" class="game">
+      <div class="progress-chip">{{ progressLabel }}</div>
+      <div class="silhouette-stage" aria-hidden="true">
+        <div class="silhouette-panel">
+          <img
+            *ngIf="currentRound.item.imageAsset as src"
+            [src]="src"
+            alt=""
+            class="photo-silhouette" />
+          <span *ngIf="!currentRound.item.imageAsset && currentRound.item.emoji" class="emoji-silhouette">{{
+            currentRound.item.emoji
+          }}</span>
+          <ion-icon
+            *ngIf="!currentRound.item.imageAsset && !currentRound.item.emoji && currentRound.item.icon"
+            [name]="currentRound.item.icon"
+            class="silhouette-icon"></ion-icon>
+        </div>
+      </div>
+      <div class="feedback" [class.visible]="!!feedbackMessage">{{ feedbackMessage || ' ' }}</div>
+      <div class="choices">
+        <ion-button
+          *ngFor="let c of currentRound.choices"
+          class="choice-btn"
+          expand="block"
+          fill="outline"
+          [disabled]="choiceLocked"
+          (click)="pickChoice(c)">
+          {{ c }}
+        </ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="screen === 'result'" class="panel">
+      <h2 class="panel-title">Round complete</h2>
+      <div class="result-stats">
+        <div class="result-pill"><strong>Correct:</strong> {{ correctCount }} / {{ roundCount }}</div>
+      </div>
+      <div class="btn-grid">
+        <ion-button class="big-btn" expand="block" (click)="playAgain()">Play Again</ion-button>
+        <ion-button class="big-btn secondary" expand="block" (click)="backToMenu()">Back to Menu</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

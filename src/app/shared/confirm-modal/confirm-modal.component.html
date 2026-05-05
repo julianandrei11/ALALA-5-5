@@ -1,0 +1,35 @@
+<div class="confirm-modal-root">
+  <div class="confirm-modal__wrap">
+    <div
+      class="confirm-modal__card"
+      role="dialog"
+      aria-modal="true"
+      (click)="$event.stopPropagation()"
+      [attr.aria-labelledby]="title?.trim() ? 'confirm-modal-title' : null">
+      <div class="confirm-modal__header" *ngIf="title?.trim()">
+        <h2 class="confirm-modal__title" id="confirm-modal-title">{{ title }}</h2>
+      </div>
+
+      <p class="confirm-modal__message">{{ message }}</p>
+
+      <div
+        class="confirm-modal__actions"
+        [class.confirm-modal__actions--single]="!showDismiss">
+        <ion-button
+          *ngIf="showDismiss"
+          class="confirm-modal__btn confirm-modal__btn--secondary"
+          fill="outline"
+          (click)="cancel()">
+          {{ cancelText }}
+        </ion-button>
+        <ion-button
+          class="confirm-modal__btn confirm-modal__btn--primary"
+          [class.confirm-modal__btn--danger]="tone === 'danger'"
+          fill="solid"
+          (click)="confirm()">
+          {{ confirmText }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>

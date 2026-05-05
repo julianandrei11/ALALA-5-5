@@ -1,0 +1,25 @@
+<ion-content class="landing-content" fullscreen [scrollY]="false">
+  <div class="landing-hero">
+    <img
+      src="assets/landing-welcome-bg.png"
+      alt=""
+      class="landing-bg"
+      decoding="async" />
+    <div class="landing-overlay" aria-hidden="true"></div>
+
+    <div class="landing-brand">
+      <div class="app-logo-container">
+        <div class="logo-ring">
+          <img src="assets/ALALA_logo.png" alt="ALALA logo" class="app-logo-image" />
+        </div>
+      </div>
+      <h1 class="app-name">ALALA</h1>
+      <p class="tagline">Assistive Learning App for Loved Ones with Alzheimer's</p>
+    </div>
+
+    <div class="landing-actions">
+      <ion-button expand="block" class="primary-action" (click)="goLogin()">Log In</ion-button>
+      <ion-button expand="block" fill="outline" class="secondary-action" (click)="goSignup()">Sign Up</ion-button>
+    </div>
+  </div>
+</ion-content>

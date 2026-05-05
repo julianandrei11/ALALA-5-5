@@ -1,0 +1,157 @@
+<ion-content
+  class="lavender-content home-screen-content"
+  [scrollY]="true"
+  [fullscreen]="false"
+  [forceOverscroll]="true">
+  <div class="home-screen-bg" aria-hidden="true"></div>
+
+  <div class="lavender-container home-screen-wrap home-screen-wrap--v2">
+    <app-global-header>
+      <div gh-left>
+        <button
+          type="button"
+          class="welcome-icon"
+          [class.welcome-icon--placeholder]="!patientProfilePhoto"
+          (click)="goToProfile()"
+          aria-label="Open profile">
+          <img *ngIf="patientProfilePhoto" [src]="patientProfilePhoto" alt="" />
+          <ion-icon *ngIf="!patientProfilePhoto" name="person" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title app-header__title--home-welcome">
+            <span class="app-header__welcome-prefix">Welcome,</span>
+            <span class="app-header__welcome-name"> {{ welcomeFirstName }}</span>
+          </h1>
+          <p class="app-header__subtitle">You're doing great today.</p>
+        </div>
+      </div>
+      <div gh-right>
+        <div class="home-streak-card" aria-label="Brain games day streak">
+          <ion-icon name="flame" class="home-streak-card__flame" aria-hidden="true"></ion-icon>
+          <span class="home-streak-card__num">{{ streakDays }}</span>
+          <span class="home-streak-card__label">Day streak</span>
+        </div>
+      </div>
+    </app-global-header>
+
+    <p class="home-section-eyebrow">Action hub</p>
+    <a
+      routerLink="/brain-games"
+      class="home-action-hub"
+      aria-label="Brain games, begin now">
+      <div class="home-action-hub__grid">
+        <div class="home-action-hub__copy">
+          <span class="home-action-hub__badge">Daily highlight</span>
+          <h3 class="home-action-hub__title">Brain Games</h3>
+          <p class="home-action-hub__desc">
+            Let's sharpen your mind today for a brighter tomorrow.
+          </p>
+          <span class="home-action-hub__cta"><span class="home-action-hub__cta-text">Begin now</span></span>
+        </div>
+        <div class="home-action-hub__visual" aria-hidden="true">
+          <div class="home-action-hub__visual-base"></div>
+          <div class="home-action-hub__visual-img-wrap">
+            <img
+              src="assets/home-brain-games-hero.png"
+              alt=""
+              class="home-action-hub__hero-img"
+              decoding="async" />
+          </div>
+          <div class="home-action-hub__visual-blend home-action-hub__visual-blend--split"></div>
+          <div class="home-action-hub__visual-blend home-action-hub__visual-blend--vignette"></div>
+        </div>
+      </div>
+    </a>
+
+    <div class="home-resources-head">
+      <p class="home-section-eyebrow home-section-eyebrow--row">Resources</p>
+    </div>
+
+    <div class="home-resources-grid" role="list">
+      <a class="home-resource-tile" routerLink="/memory-categories" role="listitem">
+        <div class="home-resource-tile__art">
+          <div class="home-resource-tile__img-stage">
+            <img
+              src="assets/home-resource-memory-cards.png"
+              alt=""
+              class="home-resource-tile__img"
+              decoding="async" />
+          </div>
+        </div>
+        <div class="home-resource-tile__meta">
+          <span class="home-resource-tile__label">Memory Cards</span>
+        </div>
+      </a>
+      <a class="home-resource-tile" routerLink="/media-albums" role="listitem">
+        <div class="home-resource-tile__art">
+          <div class="home-resource-tile__img-stage">
+            <img
+              src="assets/home-resource-media-albums.png"
+              alt=""
+              class="home-resource-tile__img"
+              decoding="async" />
+          </div>
+        </div>
+        <div class="home-resource-tile__meta">
+          <span class="home-resource-tile__label">Media Albums</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</ion-content>
+
+
+<div class="caregiver-bottom-nav" *ngIf="!isPatientMode">
+  <div class="nav-container">
+    
+    <div class="nav-item active" routerLink="/home">
+      <div class="nav-icon home-icon">
+        <ion-icon name="home"></ion-icon>
+      </div>
+      <span class="nav-label">Home</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/progress">
+      <div class="nav-icon progress-icon">
+        <ion-icon name="trending-up-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Progress</span>
+    </div>
+    
+    <div class="nav-item caregiver-mode" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label">Caregiver</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/settings">
+      <div class="nav-icon">
+        <ion-icon name="settings-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Settings</span>
+    </div>
+
+    <div class="nav-item" routerLink="/patients-dashboard">
+      <div class="nav-icon">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Patients</span>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="patient-bottom-nav" *ngIf="isPatientMode">
+  <div class="nav-container">
+    <div class="nav-item caregiver-mode active" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label">Caregiver</span>
+    </div>
+  </div>
+</div>

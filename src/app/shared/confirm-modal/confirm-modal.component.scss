@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap');
+
+/* Match signup-role-sheet__card (signup.page.scss): width, radius, title, subtitle */
+$modal-title: var(--app-primary);
+$modal-body: #64748b;
+
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.confirm-modal-root {
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+
+.confirm-modal__wrap {
+  width: 100%;
+  padding: max(14px, env(safe-area-inset-top)) 16px max(12px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-modal__card {
+  width: min(var(--app-modal-sheet-max-width, 400px), 100%);
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: var(--app-modal-radius, 24px);
+  box-shadow: none;
+  /* Single border: drawn on ion-modal::part(content) only */
+  border: none;
+  outline: none;
+  padding: 20px 22px 14px;
+  color: $modal-body;
+  box-sizing: border-box;
+  max-height: min(85vh, 560px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.confirm-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.confirm-modal__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: $modal-title;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.confirm-modal__message {
+  margin: 0 0 10px 0;
+  text-align: center;
+  color: $modal-body;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 2px;
+}
+
+/* Outline cancel left, solid primary right; action group aligned to card end */
+.confirm-modal__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.confirm-modal__actions--single {
+  justify-content: flex-end;
+}
+
+.confirm-modal__btn {
+  --border-radius: var(--app-button-pill-radius, 999px);
+  margin: 0;
+  flex: 0 0 auto;
+  min-height: var(--app-button-min-height, 44px);
+  height: var(--app-button-min-height, 44px);
+  font-size: var(--app-button-font-size, 15px);
+  font-weight: var(--app-button-font-weight, 700);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  --box-shadow: none;
+  border-radius: var(--app-button-pill-radius, 999px);
+  overflow: hidden;
+}
+
+.confirm-modal__btn::part(native) {
+  border-radius: var(--app-button-pill-radius, 999px) !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.confirm-modal__btn--primary {
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --background: var(--app-gradient-button);
+  --background-activated: var(--app-gradient-button-hover);
+  --background-focused: var(--app-gradient-button-hover);
+  --color: #ffffff;
+  --box-shadow: none;
+}
+
+.confirm-modal__btn--secondary {
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --border-width: 1.5px;
+  --border-color: rgba(var(--app-primary-rgb), 0.38);
+  --border-style: solid;
+  --color: var(--app-primary);
+  --background: #ffffff;
+  --background-activated: rgba(106, 44, 143, 0.06);
+  --background-focused: #ffffff;
+  --ripple-color: rgba(var(--app-primary-rgb), 0.12);
+  box-shadow: none;
+}
+
+.confirm-modal__btn--secondary::part(native) {
+  border-width: 1.5px !important;
+  border-style: solid !important;
+  border-color: rgba(var(--app-primary-rgb), 0.38) !important;
+}
+
+.confirm-modal__btn--danger {
+  --background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
+  --background-activated: #7f1d1d;
+  --background-focused: #7f1d1d;
+  --color: #fff;
+  --box-shadow: none;
+}

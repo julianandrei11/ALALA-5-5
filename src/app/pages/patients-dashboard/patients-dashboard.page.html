@@ -1,0 +1,439 @@
+<ion-content class="lavender-content patients-dashboard-page" [scrollY]="true" fullscreen>
+  <div
+    class="lavender-container patients-dashboard-inner"
+    [class.patients-dashboard--empty]="!isLoading && displayPatients.length === 0"
+  >
+    <app-global-header>
+      <div gh-left>
+        <div class="welcome-icon">
+          <img src="assets/ALALA_logo.png" alt="" class="logo-image" />
+        </div>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">My Patients</h1>
+          <p class="app-header__subtitle">
+            {{
+              isTrustedFamilyMember
+                ? 'Patients you were given access to. New invitations appear below.'
+                : 'Manage and access your patient records.'
+            }}
+          </p>
+        </div>
+      </div>
+      <div gh-right class="patients-dashboard-header-actions">
+        <button
+          type="button"
+          class="patients-dashboard-notify-btn"
+          (click)="openNotificationCenter()"
+          aria-label="Notifications and requests"
+        >
+          <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
+          <span class="patients-dashboard-notify-badge" *ngIf="notificationBadgeCount > 0">{{ notificationBadgeCount }}</span>
+        </button>
+      </div>
+    </app-global-header>
+
+    <section class="caregiver-code-requests" *ngIf="isPrimaryCaregiver && !isTrustedFamilyMember && pendingFamilyAccessRequests.length > 0">
+      <h2 class="caregiver-code-requests__title">Trusted family access requests</h2>
+      <p class="caregiver-code-requests__hint">Someone entered this patient’s access code. Approve only people you trust.</p>
+      <article *ngFor="let req of pendingFamilyAccessRequests" class="caregiver-code-request-card">
+        <p class="caregiver-code-request-card__text">{{ familyAccessRequestMessage(req) }}</p>
+        <div class="caregiver-code-request-card__actions">
+          <ion-button size="small" class="caregiver-code-request-card__approve" (click)="approveFamilyAccessRequest(req)">Approve</ion-button>
+          <ion-button size="small" fill="outline" color="medium" (click)="rejectFamilyAccessRequest(req)">Reject</ion-button>
+        </div>
+      </article>
+    </section>
+
+    <section class="pending-invites" *ngIf="isTrustedFamilyMember && pendingTrustedInvites.length > 0">
+      <h2 class="pending-invites__title">Access requests</h2>
+      <p class="pending-invites__hint">A caregiver is asking you to help with a patient. Accept to view and manage their data.</p>
+      <article *ngFor="let inv of pendingTrustedInvites" class="pending-invite-card">
+        <p class="pending-invite-card__text">
+          <strong>{{ inv.caregiverName || 'A caregiver' }}</strong>
+          invited you to support
+          <strong>{{ inv.patientName || 'a patient' }}</strong>.
+        </p>
+        <div class="pending-invite-card__actions">
+          <ion-button size="small" class="pending-invite-card__accept" (click)="acceptPendingInvite(inv)">Accept</ion-button>
+          <ion-button size="small" fill="outline" color="medium" (click)="declinePendingInvite(inv)">Decline</ion-button>
+        </div>
+      </article>
+    </section>
+
+    <div class="patients-search-row" *ngIf="!isLoading">
+      <div class="patients-search-field">
+        <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+        <input
+          type="search"
+          [(ngModel)]="patientSearch"
+          placeholder="Search patients..."
+          autocomplete="off"
+          aria-label="Search patients"
+        />
+      </div>
+      <button
+        type="button"
+        class="patients-filter-btn"
+        (click)="toggleGenderFilters()"
+        [class.patients-filter-btn--active]="showGenderFilters || genderFilter !== 'all'"
+        aria-label="Filter by sex"
+      >
+        <ion-icon name="options-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </div>
+
+    <div class="patients-search-row patients-join-request-row" *ngIf="isTrustedFamilyMember && !isLoading">
+      <div class="patients-search-field patients-join-request-row__field">
+        <input
+          type="text"
+          [(ngModel)]="familyJoinCodeInput"
+          placeholder="Enter patient code"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Patient access code"
+        />
+      </div>
+      <button
+        type="button"
+        class="patients-join-request-btn"
+        (click)="submitFamilyJoinCodeRequest()"
+        [disabled]="isSubmittingJoinCode"
+        aria-label="Request access"
+      >
+        <ion-spinner *ngIf="isSubmittingJoinCode" name="crescent"></ion-spinner>
+        <span *ngIf="!isSubmittingJoinCode">Request access</span>
+      </button>
+    </div>
+
+    <div class="patients-filter-chips" *ngIf="!isLoading && showGenderFilters">
+      <button type="button" class="filter-chip" [class.filter-chip--on]="genderFilter === 'Male'" (click)="setGenderFilter('Male')">Male</button>
+      <button type="button" class="filter-chip" [class.filter-chip--on]="genderFilter === 'Female'" (click)="setGenderFilter('Female')">Female</button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading patients...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="patients-layout" [class.patients-layout--empty]="displayPatients.length === 0">
+      <div class="patients-list-column">
+        <div class="patients-list" *ngIf="displayPatients.length > 0">
+          <article
+            *ngFor="let patient of filteredPatients; trackBy: trackByPatientId"
+            class="patient-card--row"
+            (click)="selectPatient(patient)"
+          >
+            <button
+              type="button"
+              class="patient-card__avatar"
+              [class.patient-card__avatar--has-photo]="!!getPatientPhoto(patient)"
+              (click)="onPatientAvatarClick(patient, $event)"
+              [attr.aria-label]="'Choose profile photo for ' + getPatientDisplayName(patient)"
+            >
+              <img *ngIf="getPatientPhoto(patient)" [src]="getPatientPhoto(patient)" alt="" />
+              <ion-icon *ngIf="!getPatientPhoto(patient)" name="person" class="patient-card__avatar-icon"></ion-icon>
+            </button>
+            <div class="patient-card__body">
+              <div class="patient-card__name-row">
+                <h3 class="patient-card__name">{{ getPatientDisplayName(patient) }}</h3>
+              </div>
+              <p class="patient-card__legal" *ngIf="getPatientLegalLine(patient)">{{ getPatientLegalLine(patient) }}</p>
+              <div class="patient-card__pills">
+                <span class="patient-pill" *ngIf="patient.gender">
+                  <ion-icon [name]="genderIconName(patient)" aria-hidden="true"></ion-icon>
+                  {{ patient.gender }}
+                </span>
+                <span class="patient-pill" *ngIf="patient.age != null">
+                  <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+                  {{ patient.age }} years
+                </span>
+              </div>
+            </div>
+            <div class="patient-card__actions" (click)="$event.stopPropagation()">
+              <button
+                type="button"
+                class="patient-action-btn patient-action-btn--more"
+                (click)="openPatientRowMenu(patient, $event)"
+                aria-label="Patient actions"
+              >
+                <ion-icon name="ellipsis-vertical"></ion-icon>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <div *ngIf="displayPatients.length > 0 && filteredPatients.length === 0" class="patients-no-results">
+          <p>No patients match your search or filter.</p>
+        </div>
+
+        <div *ngIf="displayPatients.length === 0" class="empty-state empty-state--illustrated">
+          <div class="empty-state__blob" aria-hidden="true"></div>
+          <div class="empty-state__card">
+            <span class="empty-state__pin empty-state__pin--tr" aria-hidden="true">
+              <ion-icon name="person-add-outline"></ion-icon>
+            </span>
+            <span class="empty-state__pin empty-state__pin--bl" aria-hidden="true">
+              <ion-icon name="folder-outline"></ion-icon>
+            </span>
+            <div class="empty-state__card-inner">
+              <ion-icon name="people" class="empty-state__main-icon" aria-hidden="true"></ion-icon>
+            </div>
+          </div>
+          <h2 class="empty-state__title">{{ isTrustedFamilyMember ? 'No shared patients yet' : 'No Patients Yet' }}</h2>
+          <p class="empty-state__copy">
+            {{
+              isTrustedFamilyMember
+                ? 'Use the Patient Code field above to request access. If a caregiver emailed you an invite, it will show above—accept it to connect.'
+                : 'Add your first patient to get started. You will be able to track their health, notes, and schedules here.'
+            }}
+          </p>
+          <button *ngIf="isPrimaryCaregiver" type="button" class="empty-state__cta" (click)="addPatient()">
+            <ion-icon name="add" aria-hidden="true"></ion-icon>
+            Add Patient
+          </button>
+        </div>
+      </div>
+
+      <aside class="patient-preview-panel" *ngIf="previewPatient && displayPatients.length > 0">
+        <p class="patient-preview-panel__label">Quick preview</p>
+        <h2 class="patient-preview-panel__name">{{ getPatientDisplayName(previewPatient) }}</h2>
+        <p class="patient-preview-panel__legal" *ngIf="getPatientLegalLine(previewPatient)">{{ getPatientLegalLine(previewPatient) }}</p>
+        <p class="patient-preview-panel__sub" *ngIf="previewPatient.age != null || previewPatient.gender">
+          <span *ngIf="previewPatient.gender">{{ previewPatient.gender }}</span>
+          <span *ngIf="previewPatient.gender && previewPatient.age != null"> · </span>
+          <span *ngIf="previewPatient.age != null">{{ previewPatient.age }} years</span>
+        </p>
+      </aside>
+    </div>
+
+    <button
+      *ngIf="!isLoading && displayPatients.length > 0 && isPrimaryCaregiver"
+      type="button"
+      class="patients-fab"
+      (click)="addPatient()"
+      aria-label="Add patient"
+    >
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </div>
+
+  <div *ngIf="showAddForm" class="modal-overlay" (click)="cancelAddPatient()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" type="button" aria-label="Close" (click)="cancelAddPatient()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      
+      <div class="modal-header">
+        <h1>Patient Details</h1>
+        <p>Please provide information about the patient</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="newPatientNickname">DISPLAY NAME</label>
+          <div class="input-wrapper">
+            <ion-icon name="happy-outline"></ion-icon>
+            <input
+              id="newPatientNickname"
+              [(ngModel)]="newPatientNickname"
+              placeholder="Shown first on My Patients"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="patientFirstName">FIRST NAME</label>
+          <div class="input-wrapper">
+            <ion-icon name="person-outline"></ion-icon>
+            <input
+              id="patientFirstName"
+              [(ngModel)]="newPatientFirstName"
+              placeholder="Enter patient's first name"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="patientLastName">LAST NAME</label>
+          <div class="input-wrapper">
+            <ion-icon name="person-outline"></ion-icon>
+            <input
+              id="patientLastName"
+              [(ngModel)]="newPatientLastName"
+              placeholder="Enter patient's last name"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="newPatientBirthdayInput">BIRTHDAY</label>
+          <div class="input-wrapper input-wrapper--birthday">
+            <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+            <input
+              id="newPatientBirthdayInput"
+              [(ngModel)]="newPatientBirthdayDisplay"
+              (blur)="onNewPatientBirthdayBlur()"
+              placeholder="MM/DD/YYYY"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+            />
+            <ion-button
+              type="button"
+              fill="clear"
+              class="calendar-trigger-btn"
+              (click)="openNewPatientBirthdayPopover($event)"
+              aria-label="Open calendar"
+            >
+              <ion-icon name="calendar-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+
+        <ion-popover
+          [isOpen]="newPatientBirthdayPopoverOpen"
+          [event]="newPatientBirthdayPopoverEvent"
+          (didDismiss)="onNewPatientBirthdayPopoverDismiss()"
+          reference="event"
+          side="left"
+          alignment="center"
+          size="auto"
+          cssClass="compact-birthday-popover"
+          [arrow]="true"
+          [backdropDismiss]="true"
+          [dismissOnSelect]="false"
+        >
+          <ng-template>
+            <div class="compact-birthday-inner ion-padding">
+              <ion-datetime
+                presentation="date"
+                [(ngModel)]="newPatientBirthday"
+                [max]="newPatientMaxBirth"
+                [min]="newPatientMinBirth"
+                preferWheel="false"
+                firstDayOfWeek="0"
+              ></ion-datetime>
+              <div class="compact-birthday-actions">
+                <ion-button fill="clear" size="small" (click)="closeNewPatientBirthdayPopover()">Cancel</ion-button>
+                <ion-button size="small" (click)="confirmNewPatientBirthdayPopover()">Done</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-popover>
+
+        <div class="form-group">
+          <label for="newPatientSex">SEX</label>
+          <div class="input-wrapper input-wrapper--select">
+            <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
+            <ion-select
+              id="newPatientSex"
+              [(ngModel)]="newPatientSex"
+              interface="popover"
+              placeholder="Select sex"
+              toggleIcon="chevron-down-outline"
+              expandedIcon="chevron-up-outline"
+              aria-label="Patient sex"
+            >
+              <ion-select-option value="Male">Male</ion-select-option>
+              <ion-select-option value="Female">Female</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button
+          class="save-button"
+          (click)="saveNewPatient()"
+          [disabled]="isSavingPatient"
+        >
+          <ion-spinner *ngIf="isSavingPatient" name="crescent"></ion-spinner>
+          <span *ngIf="!isSavingPatient">SAVE & CONTINUE</span>
+        </button>
+
+        <button
+          class="back-button"
+          (click)="cancelAddPatient()"
+          [disabled]="isSavingPatient"
+        >
+          BACK
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal
+    [isOpen]="notificationCenterOpen"
+    (didDismiss)="closeNotificationCenter()"
+    class="patients-notification-modal"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Notifications</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeNotificationCenter()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-segment [value]="notificationCenterTab" (ionChange)="onNotificationCenterSegmentChange($event)">
+          <ion-segment-button value="pending">
+            <ion-label>Pending</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="history">
+            <ion-label>History</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <div *ngIf="notificationCenterTab === 'pending'" class="notification-modal-section">
+          <p class="notification-modal-hint" *ngIf="isTrustedFamilyMember">
+            Join-code requests you sent appear here while the caregiver decides.
+          </p>
+          <p class="notification-modal-hint" *ngIf="!isTrustedFamilyMember">
+            Approve or decline trusted family who requested access with a patient code.
+          </p>
+          <div *ngIf="notificationPendingRows.length === 0" class="notification-modal-empty">
+            <p>Nothing pending.</p>
+          </div>
+          <article *ngFor="let req of notificationPendingRows" class="notification-modal-card">
+            <p class="notification-modal-card__text" *ngIf="!isTrustedFamilyMember">{{ familyAccessRequestMessage(req) }}</p>
+            <p class="notification-modal-card__text" *ngIf="isTrustedFamilyMember">
+              Waiting for approval for <strong>{{ req.patientName || 'patient' }}</strong>.
+            </p>
+            <div class="notification-modal-card__actions" *ngIf="!isTrustedFamilyMember && req.status === 'pending'">
+              <ion-button size="small" (click)="approveFamilyAccessRequest(req)">Approve</ion-button>
+              <ion-button size="small" fill="outline" color="medium" (click)="rejectFamilyAccessRequest(req)">Reject</ion-button>
+            </div>
+          </article>
+        </div>
+
+        <div *ngIf="notificationCenterTab === 'history'" class="notification-modal-section">
+          <div *ngIf="isLoadingNotificationHistory" class="notification-modal-loading">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+          <div *ngIf="!isLoadingNotificationHistory && notificationHistoryFiltered.length === 0" class="notification-modal-empty">
+            <p>No completed requests yet.</p>
+          </div>
+          <article *ngFor="let h of notificationHistoryFiltered" class="notification-modal-card notification-modal-card--compact">
+            <p class="notification-modal-card__meta">
+              <span [class.notification-status--approved]="h.status === 'approved'" [class.notification-status--rejected]="h.status === 'rejected'">
+                {{ h.status === 'approved' ? 'Approved' : 'Declined' }}
+              </span>
+              <span class="notification-modal-card__when" *ngIf="h.updatedAt || h.createdAt">{{ h.updatedAt || h.createdAt }}</span>
+            </p>
+            <p class="notification-modal-card__text">
+              <strong>{{ h.requesterName || 'Member' }}</strong>
+              · {{ h.patientName || 'Patient' }}
+            </p>
+          </article>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

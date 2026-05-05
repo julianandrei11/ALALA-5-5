@@ -1,0 +1,373 @@
+<ion-content class="lavender-content">
+  <div class="lavender-container">
+    
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="goBack()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Settings</h1>
+          <p class="app-header__subtitle">Manage your account settings</p>
+        </div>
+      </div>
+    </app-global-header>
+    
+    <div class="cute-card password-card password-card--compact settings-card--always-open">
+      <div class="password-compact-bar">
+        <div class="password-compact-bar__lead">
+          <div class="password-compact-bar__icon-ring" aria-hidden="true">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </div>
+          <span class="password-compact-bar__title">Patient mode password</span>
+        </div>
+        <span class="status-badge pin-status-badge" [class.active]="hasPin">
+          {{ hasPin ? 'Active' : 'Not set' }}
+        </span>
+      </div>
+
+      <div class="section-content section-content--visible section-content--password-tight">
+        <div class="password-section password-section--compact">
+          
+          <div class="password-priority-callout" *ngIf="!hasPin && !isEditingPassword">
+            <ion-icon name="key-outline" aria-hidden="true"></ion-icon>
+            <span><strong>Set a password</strong> — required to leave Patient Mode. Use 4–32 characters.</span>
+          </div>
+
+          <div class="form-field form-field--pin-readonly" *ngIf="hasPin && !isEditingPassword">
+            <ion-label class="pin-field-label">Current password</ion-label>
+            <div class="input-group input-group--readonly">
+              <span class="password-value-readonly">{{ showMasked ? maskedPin : revealedPin }}</span>
+              <ion-button fill="clear" type="button" (click)="toggleMask()" class="eye-btn pin-eye-btn">
+                <ion-icon [name]="showMasked ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          
+          
+          <div class="password-actions password-actions--inline" *ngIf="!isEditingPassword">
+            <ion-button
+              fill="outline"
+              (click)="promptRemovePin()"
+              *ngIf="hasPin"
+              class="password-action-btn password-action-btn--remove">
+              Remove
+            </ion-button>
+            <ion-button (click)="startPasswordEdit()" class="primary-btn password-action-btn">
+              {{ hasPin ? 'Change' : 'Set password' }}
+            </ion-button>
+          </div>
+          
+          
+          <form (ngSubmit)="savePin()" #pinForm="ngForm" class="password-form" *ngIf="isEditingPassword">
+            <div class="form-field" *ngIf="hasPin">
+              <ion-label>Current Password</ion-label>
+              <div class="input-group">
+                <ion-input
+                  [type]="showCurrent ? 'text' : 'password'"
+                  [(ngModel)]="form.currentPin"
+                  name="currentPin"
+                  placeholder="Enter current password"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  required>
+                </ion-input>
+                <ion-button fill="clear" type="button" (click)="showCurrent = !showCurrent" class="eye-btn pin-eye-btn">
+                  <ion-icon [name]="showCurrent ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            
+            <div class="form-field">
+              <ion-label>New Password</ion-label>
+              <div class="input-group">
+                <ion-input
+                  [type]="showNew ? 'text' : 'password'"
+                  [(ngModel)]="form.newPin"
+                  name="newPin"
+                  placeholder="Enter new password (4-32 characters)"
+                  minlength="4"
+                  maxlength="32"
+                  autocomplete="new-password"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  required>
+                </ion-input>
+                <ion-button fill="clear" type="button" (click)="showNew = !showNew" class="eye-btn pin-eye-btn">
+                  <ion-icon [name]="showNew ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            
+            <div class="form-field">
+              <ion-label>Confirm New Password</ion-label>
+              <div class="input-group">
+                <ion-input
+                  [type]="showConfirm ? 'text' : 'password'"
+                  [(ngModel)]="form.confirmPin"
+                  name="confirmPin"
+                  placeholder="Re-enter new password"
+                  minlength="4"
+                  maxlength="32"
+                  autocomplete="new-password"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  required>
+                </ion-input>
+                <ion-button fill="clear" type="button" (click)="showConfirm = !showConfirm" class="eye-btn pin-eye-btn">
+                  <ion-icon [name]="showConfirm ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            
+            <div class="form-actions form-actions--inline-end">
+              <ion-button
+                fill="outline"
+                (click)="cancelPasswordEdit()"
+                [disabled]="saving"
+                type="button"
+                class="cancel-btn form-action-btn">
+                Cancel
+              </ion-button>
+              <ion-button type="submit" [disabled]="saving" class="primary-btn form-action-btn">
+                {{ hasPin ? 'Update' : 'Set password' }}
+              </ion-button>
+            </div>
+          </form>
+          
+          <div class="password-hint password-hint--secondary" *ngIf="hasPin || isEditingPassword">
+            <ion-icon name="information-circle-outline" aria-hidden="true"></ion-icon>
+            <span>4–32 characters. Not the same as your account login password.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cute-card change-password-card settings-ion-card-row" (click)="changePassword()" role="button" tabindex="0">
+      <div class="change-password-row">
+        <div class="change-password-icon" aria-hidden="true">
+          <ion-icon name="key-outline"></ion-icon>
+        </div>
+        <div class="change-password-text">
+          <span class="change-password-title">Change account password</span>
+          <span class="change-password-sub">Update your login password</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="change-password-chevron" aria-hidden="true"></ion-icon>
+      </div>
+    </div>
+
+
+    <div class="cute-card contacts-card">
+      <div class="card-header settings-ion-card-row card-header--trusted-chevron" (click)="toggleSection('contacts')">
+        <div class="header-content">
+          <div class="header-icon">
+            <ion-icon name="people-outline"></ion-icon>
+          </div>
+          <div class="header-text">
+            <h2>Trusted family</h2>
+            <p>Send an access invite</p>
+          </div>
+        </div>
+        <div class="expand-icon">
+          <ion-icon [name]="expandedSections['contacts'] ? 'chevron-up' : 'chevron-down'"></ion-icon>
+        </div>
+      </div>
+
+      <div class="section-content section-content--trusted-tight" *ngIf="expandedSections['contacts']">
+        <div class="contacts-section contacts-section--trusted-family" *ngIf="canManageTrustedFamily">
+          <p class="trusted-family-empty" *ngIf="patientsForTrustedFamily.length === 0">
+            Add a patient from the <strong>Patients</strong> tab first.
+          </p>
+
+          <div class="trusted-family-context" *ngIf="patientsForTrustedFamily.length > 0">
+            <div class="trusted-family-context__ok" *ngIf="trustedFamilyPatientId">
+              <div class="trusted-family-context__avatar" aria-hidden="true">
+                <img *ngIf="trustedFamilyPatientPhotoUrl" [src]="trustedFamilyPatientPhotoUrl" alt="" />
+                <div *ngIf="!trustedFamilyPatientPhotoUrl" class="trusted-family-context__avatar-fallback">
+                  <ion-icon name="person-outline"></ion-icon>
+                </div>
+              </div>
+              <div class="trusted-family-context__body">
+                <span class="trusted-family-context__eyebrow">You’re inviting for</span>
+                <span class="trusted-family-context__name">{{ trustedFamilyPatientLabel }}</span>
+                <button type="button" class="trusted-family-context__link" (click)="confirmGoToPatientsForSwitch()">
+                  Switch patient in Patients tab
+                </button>
+              </div>
+            </div>
+
+            <div class="trusted-family-context__pick" *ngIf="!trustedFamilyPatientId">
+              <p class="trusted-family-context__pick-text">
+                You have more than one patient. Open <strong>Patients</strong>, tap the patient you want to share, then
+                return here.
+              </p>
+              <ion-button size="small" fill="outline" class="trusted-family-context__btn" (click)="confirmGoToPatientsForSwitch()">
+                Open Patients
+              </ion-button>
+            </div>
+          </div>
+
+          <div class="trusted-family-send" *ngIf="trustedFamilyPatientId">
+            <p class="trusted-family-send__steps">
+              <strong>1.</strong> Type their email or phone — the same one they used for ALALA.<br />
+              <strong>2.</strong> Tap send. They’ll see the request and can accept.<br />
+              <strong>Tip:</strong> Each patient also has a permanent access code on <strong>Patient Profile</strong>; trusted family can enter that code on <strong>My Patients</strong> to request access (you approve or decline).
+            </p>
+
+            <form (ngSubmit)="sendTrustedFamilyInvite()" #trustedFamilyForm="ngForm">
+              <div class="form-field form-field--lined">
+                <ion-label>Their email or phone</ion-label>
+                <div class="trusted-family-input-line">
+                  <ion-input
+                    type="text"
+                    inputmode="email"
+                    [(ngModel)]="trustedFamilyContact"
+                    name="trustedFamilyContact"
+                    placeholder="e.g. name@email.com or 09…"
+                    autocomplete="off">
+                  </ion-input>
+                </div>
+              </div>
+              <ion-button
+                expand="block"
+                type="submit"
+                class="cute-button trusted-family-send__submit"
+                [disabled]="trustedFamilyLoading || !trustedFamilyContact?.trim()">
+                <ion-spinner *ngIf="trustedFamilyLoading" name="crescent"></ion-spinner>
+                <ion-icon *ngIf="!trustedFamilyLoading" name="send-outline" slot="start"></ion-icon>
+                <span *ngIf="!trustedFamilyLoading">Send access invite</span>
+              </ion-button>
+            </form>
+          </div>
+
+          <div class="trusted-family-list" *ngIf="trustedFamilyPatientId && pendingInvitesSent.length > 0">
+            <h4>Waiting for them to accept</h4>
+            <div class="contact-item" *ngFor="let inv of pendingInvitesSent">
+              <div class="contact-avatar">
+                <ion-icon name="hourglass-outline"></ion-icon>
+              </div>
+              <div class="contact-info">
+                <div class="contact-name">{{ inviteeDisplayName(inv.inviteeUserId) }}</div>
+                <div class="contact-code">Pending</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="trusted-family-list trusted-family-list--access" *ngIf="trustedFamilyPatientId && activeGrants.length > 0">
+            <h4>Already has access</h4>
+            <div class="access-grants-wrap">
+              <div class="access-grant-chip" *ngFor="let g of activeGrants">
+                <div class="access-grant-chip__avatar">
+                  <img *ngIf="g.photoUrl" [src]="g.photoUrl" alt="" />
+                  <div *ngIf="!g.photoUrl" class="access-grant-chip__fallback">
+                    <ion-icon name="person-outline"></ion-icon>
+                  </div>
+                </div>
+                <span class="access-grant-chip__name">{{ grantDisplayFirstName(g) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contacts-section" *ngIf="!canManageTrustedFamily">
+          <p class="trusted-family-hint">
+            Trusted family invitations are available on caregiver accounts. Trusted family members receive invites from
+            caregivers on their own Patients screen.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="options-section">
+      <div class="option-item" (click)="clearAllData()">
+        <div class="option-icon clear-data">
+          <ion-icon name="trash-outline"></ion-icon>
+        </div>
+        <div class="option-content">
+          <div class="option-title">Clear All Data</div>
+          <div class="option-subtitle">Remove all game progress</div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="option-arrow"></ion-icon>
+      </div>
+      
+      <div class="option-item option-item--delete-patient" (click)="deletePatient()">
+        <div class="option-icon delete-patient">
+          <ion-icon name="person-remove-outline"></ion-icon>
+        </div>
+        <div class="option-content">
+          <div class="option-title">Delete Patient</div>
+          <div class="option-subtitle">Permanently remove this patient</div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="option-arrow"></ion-icon>
+      </div>
+      
+      <div class="option-item option-item--logout" (click)="logout()">
+        <div class="option-icon logout-icon">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </div>
+        <div class="option-content">
+          <div class="option-title">Logout</div>
+          <div class="option-subtitle">Sign out of your account</div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="option-arrow"></ion-icon>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+
+<div class="caregiver-bottom-nav" *ngIf="!isPatientMode">
+  <div class="nav-container">
+    <div class="nav-item" routerLink="/home">
+      <div class="nav-icon home-icon">
+        <ion-icon name="home"></ion-icon>
+      </div>
+      <span class="nav-label">Home</span>
+    </div>
+
+    <div class="nav-item" routerLink="/progress">
+      <div class="nav-icon progress-icon">
+        <ion-icon name="trending-up-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Progress</span>
+    </div>
+
+    <div class="nav-item caregiver-mode" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label">Caregiver</span>
+    </div>
+
+    <div class="nav-item active" routerLink="/settings">
+      <div class="nav-icon">
+        <ion-icon name="settings-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Settings</span>
+    </div>
+
+    <div class="nav-item" routerLink="/patients-dashboard">
+      <div class="nav-icon">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <span class="nav-label">Patients</span>
+    </div>
+  </div>
+</div>
+
+<div class="patient-bottom-nav" *ngIf="isPatientMode">
+  <div class="nav-container">
+    <div class="nav-item caregiver-mode active" (click)="onPatientModeToggle()">
+      <div class="nav-icon caregiver-icon">
+        <ion-icon [name]="isPatientMode ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+      </div>
+      <span class="nav-label">Caregiver</span>
+    </div>
+  </div>
+</div>

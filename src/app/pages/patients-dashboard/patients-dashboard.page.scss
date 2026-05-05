@@ -1,0 +1,1303 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import '../../../theme/empty-state-illustrated.scss';
+
+/* Header ALALA mark: no lavender/grey ring (global header uses avatar-ring fill by default). */
+:host ::ng-deep app-global-header .app-page-header-card__main .welcome-icon {
+  background: transparent;
+}
+
+/* Backdrop matches global Home atmosphere (--app-home-atmosphere-bg on ion-content::part(background)) */
+ion-content.patients-dashboard-page {
+  --ion-background-color: transparent;
+  --background: transparent;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+.lavender-toolbar {
+  --background: linear-gradient(135deg, var(--app-primary) 0%, var(--app-primary) 50%, var(--app-primary) 100%);
+  --color: white;
+  --border-width: 0;
+  box-shadow: 0 4px 20px rgba(var(--app-primary-rgb), 0.3);
+  
+  .cute-title {
+    font-weight: 600;
+    font-size: 22px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
+
+.cute-icon-btn {
+  --background: rgba(255,255,255,0.15);
+  --color: white;
+  --border-radius: 999px;
+  --border-width: 0;
+  width: auto;
+  min-width: 48px;
+  height: 44px;
+  margin: 0 4px;
+  backdrop-filter: blur(10px);
+  
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+.lavender-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px);
+  padding: 16px;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 100px;
+}
+
+// Modal Overlay Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72));
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: min(var(--app-modal-sheet-max-width, 400px), 100%);
+  padding: 28px 22px 22px;
+  border-radius: var(--app-modal-radius, 24px);
+  background: #ffffff;
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38));
+  box-shadow: none;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--app-primary);
+  z-index: 2;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--app-primary);
+  }
+
+  p {
+    margin: 8px 0 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: #64748b;
+  }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--app-primary);
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.5px solid rgba(var(--app-primary-rgb), 0.22);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+
+  ion-icon {
+    font-size: 20px;
+    color: var(--app-primary);
+    flex-shrink: 0;
+  }
+
+  input, select {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: var(--app-text);
+    font-family: inherit;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  select {
+    appearance: none;
+    cursor: pointer;
+    
+    option {
+      background: white;
+      color: var(--app-text);
+    }
+  }
+
+  &.input-wrapper--birthday {
+    padding-right: 8px;
+    gap: 8px;
+
+    input {
+      min-width: 0;
+    }
+
+    .calendar-trigger-btn {
+      --color: var(--app-primary);
+      --padding-start: 6px;
+      --padding-end: 6px;
+      margin: 0;
+      flex-shrink: 0;
+
+      ion-icon {
+        font-size: 22px;
+      }
+    }
+  }
+
+  &.input-wrapper--select {
+    ion-select {
+      flex: 1;
+      width: 100%;
+      max-width: 100%;
+      --padding-top: 0;
+      --padding-bottom: 0;
+      --padding-start: 0;
+      --padding-end: 0;
+      font-size: 15px;
+      color: var(--app-text);
+      --icon-color: var(--app-primary);
+    }
+  }
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--app-button-pill-radius, 999px);
+  background: var(--app-gradient-button);
+  color: white;
+  font-size: var(--app-button-font-size, 15px);
+  font-weight: var(--app-button-font-weight, 700);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: var(--app-button-min-height, 44px);
+  font-family: inherit;
+  transition: filter 0.15s ease, transform 0.1s ease;
+
+  &:hover {
+    filter: brightness(1.03);
+  }
+
+  &:active {
+    transform: scale(0.99);
+    filter: brightness(0.96);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.back-button {
+  width: 100%;
+  padding: 14px 24px;
+  border: 1.5px solid rgba(var(--app-primary-rgb), 0.38);
+  border-radius: var(--app-button-pill-radius, 999px);
+  background: #ffffff;
+  color: var(--app-primary);
+  font-size: var(--app-button-font-size, 15px);
+  font-weight: var(--app-button-font-weight, 700);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: var(--app-button-min-height, 44px);
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: rgba(var(--app-primary-rgb), 0.06);
+    border-color: var(--app-primary);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.welcome-section {
+  flex-shrink: 0;
+  
+  .welcome-content {
+    background: linear-gradient(180deg, #ffffff 0%, #faf6ef 100%);
+    border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(var(--app-primary-rgb), 0.15);
+    
+    .welcome-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--app-primary) 0%, #9c6bb0 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(var(--app-primary-rgb), 0.3);
+      
+      ion-icon {
+        font-size: 28px;
+        color: white;
+      }
+    }
+    
+    .welcome-text {
+      flex: 1;
+      
+      h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--app-text);
+        margin-bottom: 4px;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #6b7280;
+        font-weight: 400;
+      }
+    }
+
+    .add-btn {
+      --color: var(--app-primary);
+      --background: transparent;
+      --background-hover: rgba(var(--app-primary-rgb), 0.1);
+      --padding-start: 8px;
+      --padding-end: 8px;
+      width: auto;
+      height: 44px;
+      min-width: 44px;
+      flex-shrink: 0;
+      margin: 0;
+
+      ion-icon {
+        font-size: 28px;
+        color: var(--app-primary);
+      }
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+  
+  ion-spinner {
+    --color: var(--app-primary);
+  }
+  
+  p {
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+.patients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  
+  @media (max-width: 640px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+}
+
+.patient-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(var(--app-primary-rgb), 0.15);
+  overflow: hidden;
+  border: 2px solid rgba(var(--app-primary-rgb), 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(var(--app-primary-rgb), 0.25);
+    border-color: rgba(var(--app-primary-rgb), 0.3);
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+  }
+  
+  &.add-patient-card {
+    border-style: dashed;
+    border-color: rgba(var(--app-primary-rgb), 0.3);
+    background: linear-gradient(135deg, var(--app-bg-1) 0%, var(--app-bg-2) 100%);
+    
+    &:hover {
+      border-color: rgba(var(--app-primary-rgb), 0.5);
+      background: linear-gradient(135deg, var(--app-bg-2) 0%, var(--app-bg-3) 100%);
+    }
+  }
+}
+
+.patient-card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  position: relative;
+}
+
+.patient-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--app-primary) 0%, #9c6bb0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(var(--app-primary-rgb), 0.3);
+  overflow: hidden;
+  position: relative;
+  
+  &.has-photo {
+    background: transparent;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  &.add-avatar {
+    background: rgba(var(--app-primary-rgb), 0.1);
+    border: 2px dashed rgba(var(--app-primary-rgb), 0.4);
+    
+    ion-icon {
+      font-size: 32px;
+      color: var(--app-primary);
+    }
+  }
+  
+  .patient-initials {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+  }
+}
+
+.patient-info {
+  flex: 1;
+  width: 100%;
+  
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--app-text);
+    line-height: 1.3;
+  }
+  
+  .patient-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #6b7280;
+      
+      ion-icon {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.patient-action {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  
+  ion-icon {
+    font-size: 20px;
+    color: #9ca3af;
+  }
+}
+
+.patient-delete {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+  background: rgba(var(--app-primary-rgb), 0.06);
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.patient-delete ion-icon {
+  font-size: 20px;
+}
+
+.patient-delete:active {
+  transform: scale(0.98);
+}
+
+.add-patient-card {
+  .patient-info {
+    h3 {
+      color: var(--app-primary);
+    }
+    
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  }
+}
+
+// ─── My Patients dashboard (list + preview, ALALA palette only) ─────────────
+$dash-text: var(--app-text);
+$dash-muted: #6b7280;
+$dash-pill-bg: #ece8e2;
+$dash-icon: #5c5c5c;
+
+.patients-dashboard-inner {
+  padding-bottom: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.patients-dashboard-inner.patients-dashboard--empty {
+  flex: 1;
+  min-height: calc(100dvh - 72px);
+}
+
+.patients-page-heading__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  text-align: left;
+}
+
+.patients-page-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.patients-page-brand__logo {
+  width: clamp(64px, 18vw, 80px);
+  height: clamp(64px, 18vw, 80px);
+  object-fit: contain;
+  display: block;
+}
+
+.patients-page-heading__copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.patients-page-heading {
+  margin: 4px 0 16px;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  align-self: stretch;
+}
+
+.patients-page-title {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.65rem, 5vw, 2rem);
+  font-weight: 700;
+  color: $dash-text;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.patients-page-subtitle {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: $dash-muted;
+  line-height: 1.4;
+}
+
+.patients-search-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.patients-join-request-row {
+  align-items: stretch;
+  margin-bottom: 6px;
+}
+
+.patients-join-request-btn {
+  flex-shrink: 0;
+  height: 48px;
+  min-width: 120px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 999px;
+  background: var(--app-primary);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(var(--app-primary-rgb), 0.35);
+  -webkit-tap-highlight-color: transparent;
+
+  ion-spinner {
+    width: 20px;
+    height: 20px;
+    --color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+.patients-search-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 48px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+
+  ion-icon {
+    font-size: 20px;
+    color: $dash-muted;
+    flex-shrink: 0;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: $dash-text;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+.patients-filter-btn {
+  min-width: 48px;
+  width: auto;
+  height: 48px;
+  padding: 0 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  -webkit-tap-highlight-color: transparent;
+
+  ion-icon {
+    font-size: 22px;
+    color: $dash-icon;
+  }
+
+  &--active {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 0 0 2px rgba(var(--app-primary-rgb), 0.22);
+  }
+}
+
+.patients-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.filter-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  color: $dash-muted;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+
+  &--on {
+    background: $dash-pill-bg;
+    color: $dash-icon;
+    border-color: transparent;
+    font-weight: 600;
+  }
+}
+
+.patients-layout {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+
+  @media (min-width: 960px) {
+    grid-template-columns: minmax(0, 1fr) 272px;
+    gap: 20px;
+  }
+}
+
+.patients-layout--empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: min(420px, 52dvh);
+  width: 100%;
+
+  .patients-list-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+  }
+}
+
+/* Softer empty-state accent — matches Home (avoid heavy purple blob) */
+.patients-dashboard-inner .empty-state__blob {
+  background: rgba(var(--app-primary-rgb), 0.14);
+}
+
+.patients-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.patient-card--row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 14px;
+  padding: 12px 14px 10px;
+  text-align: left;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(var(--app-primary-rgb), 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.05),
+      0 18px 40px rgba(0, 0, 0, 0.1),
+      0 4px 12px rgba(var(--app-primary-rgb), 0.08);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.patient-card__avatar {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(var(--app-primary-rgb), 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &--has-photo {
+    background: #f3f4f6;
+    box-shadow: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.patient-card__avatar-icon {
+  font-size: 28px;
+  color: var(--app-primary);
+  opacity: 0.85;
+}
+
+.patient-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.patient-card__name-row {
+  margin-bottom: 4px;
+}
+
+.patient-card__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--app-primary);
+  line-height: 1.25;
+}
+
+.patient-card__legal {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: $dash-muted;
+  line-height: 1.3;
+}
+
+.patient-card__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.patient-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: $dash-pill-bg;
+  font-size: 12px;
+  font-weight: 500;
+  color: $dash-icon;
+
+  ion-icon {
+    font-size: 14px;
+    color: $dash-icon;
+  }
+}
+
+.patient-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.patient-meta-line {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: $dash-muted;
+}
+
+.patient-meta-label {
+  font-weight: 600;
+  color: $dash-icon;
+  margin-right: 4px;
+}
+
+.patient-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+
+.patient-action-btn {
+  min-width: 44px;
+  height: 40px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  color: $dash-icon;
+  -webkit-tap-highlight-color: transparent;
+
+  ion-icon {
+    color: $dash-icon;
+  }
+
+  &--delete ion-icon,
+  &--more ion-icon {
+    font-size: 22px;
+  }
+
+  &:active {
+    opacity: 0.75;
+  }
+}
+
+.patients-no-results {
+  padding: 28px 16px;
+  text-align: center;
+  color: $dash-muted;
+  font-size: 14px;
+}
+
+.patient-preview-panel {
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.07);
+  display: none;
+
+  @media (min-width: 960px) {
+    display: block;
+    position: sticky;
+    top: 12px;
+  }
+}
+
+.patient-preview-panel__label {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $dash-muted;
+}
+
+.patient-preview-panel__name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $dash-text;
+  line-height: 1.25;
+}
+
+.patient-preview-panel__legal {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: $dash-muted;
+  line-height: 1.35;
+}
+
+.patient-preview-panel__sub {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: $dash-muted;
+}
+
+.patients-fab {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  z-index: 900;
+  width: 64px;
+  min-width: 64px;
+  height: 52px;
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-primary);
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(var(--app-primary-rgb), 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  -webkit-tap-highlight-color: transparent;
+
+  ion-icon {
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.pending-invites {
+  margin: 0 0 20px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(var(--app-primary-rgb), 0.15);
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.08);
+}
+
+.pending-invites__title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.pending-invites__hint {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.pending-invite-card {
+  padding: 12px 0;
+  border-top: 1px solid rgba(30, 41, 59, 0.08);
+
+  &:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.pending-invite-card__text {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--app-text);
+}
+
+.pending-invite-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pending-invite-card__accept {
+  --background: var(--app-primary);
+  --color: #fff;
+}
+
+.patients-dashboard-header-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.patients-dashboard-notify-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(var(--app-primary-rgb), 0.22);
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: none;
+
+  &:active {
+    background: rgba(var(--app-primary-rgb), 0.08);
+  }
+
+  ion-icon {
+    font-size: 22px;
+  }
+}
+
+.patients-dashboard-notify-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.caregiver-code-requests {
+  margin: 0 0 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(var(--app-primary-rgb), 0.18);
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.08);
+}
+
+.caregiver-code-requests__title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.caregiver-code-requests__hint {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.caregiver-code-request-card {
+  padding: 12px 0;
+  border-top: 1px solid rgba(30, 41, 59, 0.08);
+
+  &:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.caregiver-code-request-card__text {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--app-text);
+}
+
+.caregiver-code-request-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.caregiver-code-request-card__approve {
+  --background: var(--app-primary);
+  --color: #fff;
+}
+
+.notification-modal-section {
+  margin-top: 16px;
+}
+
+.notification-modal-hint {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.notification-modal-empty {
+  text-align: center;
+  color: #94a3b8;
+  padding: 24px 8px;
+  font-size: 0.9rem;
+}
+
+.notification-modal-loading {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.notification-modal-card {
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(30, 41, 59, 0.08);
+}
+
+.notification-modal-card--compact {
+  padding: 10px 14px;
+}
+
+.notification-modal-card__text {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--app-text);
+}
+
+.notification-modal-card__meta {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  color: #64748b;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.notification-modal-card__when {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.notification-status--approved {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.notification-status--rejected {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.notification-modal-card__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

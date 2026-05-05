@@ -1,0 +1,299 @@
+<ion-header>
+  <ion-toolbar class="app-toolbar-purple">
+    <ion-buttons slot="start">
+      <ion-button fill="clear" color="light" (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light" class="header-title">Statistics</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  class="lavender-content progress-screen statistics-screen"
+  fullscreen
+  [scrollX]="true">
+  <div class="header-spacer"></div>
+
+  <div class="lavender-container app-container">
+      <div class="stats-game-tabs-scroll">
+        <div class="stats-game-tabs" role="tablist" aria-label="Statistics by game">
+          <button
+            type="button"
+            role="tab"
+            class="stats-game-tab"
+            [class.is-active]="selectedGameTab === 'flashcards'"
+            [attr.aria-selected]="selectedGameTab === 'flashcards'"
+            (click)="selectGameTab('flashcards')">
+            Flashcards
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="stats-game-tab"
+            [class.is-active]="selectedGameTab === 'memory-recall'"
+            [attr.aria-selected]="selectedGameTab === 'memory-recall'"
+            (click)="selectGameTab('memory-recall')">
+            Memory Recall
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="stats-game-tab"
+            [class.is-active]="selectedGameTab === 'silhouettes'"
+            [attr.aria-selected]="selectedGameTab === 'silhouettes'"
+            (click)="selectGameTab('silhouettes')">
+            Guess the Silhouettes
+          </button>
+        </div>
+      </div>
+
+      <div class="period-selector">
+        <ion-segment class="app-segment" [(ngModel)]="selectedPeriod" (ionChange)="onPeriodChange()">
+          <ion-segment-button value="today">
+            <ion-label>Today</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="week">
+            <ion-label>Week</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="month">
+            <ion-label>Month</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="custom">
+            <ion-label>Custom</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="all">
+            <ion-label>All</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div class="custom-range" *ngIf="selectedPeriod === 'custom'">
+        <div class="custom-range-header">
+          <h3>
+            <ion-icon name="calendar-outline"></ion-icon>
+            Select Date Range
+          </h3>
+          <p>Choose your custom time period</p>
+        </div>
+
+        <div class="date-range-dropdown" (click)="toggleDateRangePicker()">
+          <div class="dropdown-content">
+            <ion-icon name="calendar-outline" class="calendar-icon"></ion-icon>
+            <span class="date-range-text">{{ dateRangeText }}</span>
+            <ion-icon name="chevron-down" class="dropdown-arrow"></ion-icon>
+          </div>
+        </div>
+
+        <div
+          class="range-calendar-overlay"
+          *ngIf="isDateRangePickerOpen"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="range-cal-title"
+          (click)="closeDateRangePicker()">
+          <div class="range-calendar-modal" (click)="$event.stopPropagation()">
+            <div class="range-cal-top">
+              <div class="range-cal-title-row">
+                <ion-icon name="calendar-outline" class="range-cal-title-icon" aria-hidden="true"></ion-icon>
+                <span class="range-cal-title-text" id="range-cal-title">Select Range</span>
+              </div>
+              <button type="button" class="range-cal-today" (click)="jumpCalendarToToday()">Today</button>
+            </div>
+
+            <div class="range-cal-month-nav">
+              <button
+                type="button"
+                class="range-cal-nav-btn"
+                (click)="navigateCalendarMonth(-1)"
+                aria-label="Previous month">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+              </button>
+              <span class="range-cal-month-label">{{ calendarMonthYearLabel }}</span>
+              <button
+                type="button"
+                class="range-cal-nav-btn"
+                (click)="navigateCalendarMonth(1)"
+                aria-label="Next month">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </button>
+            </div>
+
+            <div class="range-cal-card">
+              <div class="range-cal-weekdays" aria-hidden="true">
+                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+              </div>
+              <div class="range-cal-grid">
+                <button
+                  type="button"
+                  *ngFor="let cell of calendarCells"
+                  class="range-cal-cell"
+                  [class.other-month]="!cell.inCurrentMonth"
+                  [class.is-start]="cell.isRangeStart"
+                  [class.is-end]="cell.isRangeEnd"
+                  [class.is-between]="cell.isBetween"
+                  [attr.aria-label]="cell.dayNum + ', ' + (cell.inCurrentMonth ? calendarMonthYearLabel : 'other month')"
+                  (click)="onCalendarDayClick(cell.date)">
+                  <span class="range-cal-daynum">{{ cell.dayNum }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="range-cal-summary">
+              <div class="range-cal-summary-col">
+                <span class="range-cal-summary-lbl">Start date</span>
+                <strong class="range-cal-summary-val">{{ summaryStartLabel }}</strong>
+              </div>
+              <div class="range-cal-summary-divider" aria-hidden="true"></div>
+              <div class="range-cal-summary-col">
+                <span class="range-cal-summary-lbl">End date</span>
+                <strong class="range-cal-summary-val">{{ summaryEndLabel }}</strong>
+              </div>
+            </div>
+
+            <button type="button" class="range-cal-confirm" (click)="applyDateRange()">
+              <span>Confirm Range</span>
+              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-summary-block">
+        <div class="stat-card brain-score-card">
+          <div
+            class="brain-score-gauge"
+            role="img"
+            [attr.aria-label]="(selectedGameTab === 'memory-recall' ? 'Delayed recall ' : 'Brain score ') + overallStats.accuracy + ' percent'">
+            <svg viewBox="0 0 100 100" class="brain-score-svg" aria-hidden="true">
+              <circle
+                class="brain-score-track"
+                cx="50"
+                cy="50"
+                [attr.r]="brainScoreRingRadius"
+                fill="none" />
+              <circle
+                class="brain-score-progress"
+                cx="50"
+                cy="50"
+                [attr.r]="brainScoreRingRadius"
+                fill="none"
+                stroke-linecap="round"
+                transform="rotate(-90 50 50)"
+                [attr.stroke-dasharray]="brainScoreCircumference"
+                [attr.stroke-dashoffset]="brainScoreDashOffset" />
+            </svg>
+            <div class="brain-score-center">
+              <span class="brain-score-value">{{ overallStats.accuracy }}%</span>
+              <span class="brain-score-label">{{ selectedGameTab === 'memory-recall' ? 'Delayed Recall' : 'Cognitive Score' }}</span>
+            </div>
+          </div>
+
+          <div class="brain-score-subpill" *ngIf="selectedGameTab === 'memory-recall'">
+            <span>Study Set Size: <strong>{{ memoryRecallDisplay.studySetSize }}</strong> Items</span>
+          </div>
+        </div>
+
+        <div class="chart-section chart-section--below-brain">
+          <h2>
+            Accuracy Over Time -
+            {{ selectedPeriod === 'today' ? 'Today' : (selectedPeriod === 'week' ? 'Week View' : (selectedPeriod === 'month' ? 'Month View' : 'Progress')) }}
+          </h2>
+          <div class="chart-container" *ngIf="chartLoaded && (hasDataForPeriod || selectedPeriod !== 'custom')">
+            <canvas #accuracyChart></canvas>
+          </div>
+          <div class="chart-fallback" *ngIf="chartLoaded && !hasDataForPeriod && selectedPeriod === 'custom'">
+            <div class="fallback-message">
+              <ion-icon name="analytics-outline"></ion-icon>
+              <p>No Data</p>
+              <p class="small-text" *ngIf="customStartDate && customEndDate">
+                No sessions found for {{ customStartDate }} - {{ customEndDate }}
+              </p>
+            </div>
+          </div>
+          <div class="chart-fallback" *ngIf="!chartLoaded">
+            <div class="fallback-message">
+              <ion-icon name="bar-chart-outline"></ion-icon>
+              <p>Chart visualization temporarily unavailable</p>
+              <p class="small-text">Data is still being tracked in the background</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcards / silhouettes metrics -->
+        <div class="stats-grid stats-grid--metrics" *ngIf="selectedGameTab !== 'memory-recall'">
+          <div class="stat-card cards">
+            <div class="stat-icon">
+              <ion-icon name="library-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <h3>{{ overallStats.totalCards }}</h3>
+              <p>Cards Reviewed</p>
+            </div>
+          </div>
+
+          <div class="stat-card time">
+            <div class="stat-icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <h3>{{ overallStats.avgTimePerCard }}s</h3>
+              <p>Avg Time/Card</p>
+            </div>
+          </div>
+
+          <div class="stat-card record">
+            <div class="stat-icon">
+              <ion-icon name="ribbon-outline"></ion-icon>
+            </div>
+            <div class="stat-content stat-content--record">
+              <h3 class="stat-record-fraction" aria-label="Correct answers out of cards reviewed">
+                <span class="stat-record-num">{{ overallStats.recordCorrect }}</span>
+                <span class="stat-record-sep" aria-hidden="true">/</span>
+                <span class="stat-record-den">{{ overallStats.recordTotal }}</span>
+              </h3>
+              <p>Record</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Memory Recall metrics -->
+        <div class="stats-grid stats-grid--metrics" *ngIf="selectedGameTab === 'memory-recall'">
+          <div class="stat-card record">
+            <div class="stat-icon">
+              <ion-icon name="clipboard-outline"></ion-icon>
+            </div>
+            <div class="stat-content stat-content--record">
+              <h3 class="stat-record-fraction" aria-label="Correct answers out of study set size">
+                <span class="stat-record-num">{{ memoryRecallDisplay.correctAnswers }}</span>
+                <span class="stat-record-sep" aria-hidden="true">/</span>
+                <span class="stat-record-den">{{ memoryRecallDisplay.totalQuestions }}</span>
+              </h3>
+              <p>Correct Answers</p>
+            </div>
+          </div>
+
+          <div class="stat-card time">
+            <div class="stat-icon">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <h3>{{ memoryRecallDisplay.falseSelections }}</h3>
+              <p>False Selections</p>
+            </div>
+          </div>
+
+          <div class="stat-card time">
+            <div class="stat-icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <h3>{{ formatMinutesSeconds(memoryRecallDisplay.totalTimeSeconds) }}</h3>
+              <p>Recall Time Average</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</ion-content>
+

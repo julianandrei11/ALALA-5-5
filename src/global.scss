@@ -1,0 +1,1661 @@
+
+
+
+ion-content {
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  --overflow: scroll;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --ion-background-color: transparent;
+  --ion-text-color: var(--app-text);
+  color: var(--app-text);
+}
+
+ion-content.lavender-content {
+  --overflow: scroll !important;
+}
+
+/* Smooth scrolling on mobile */
+ion-content::part(scroll) {
+  -webkit-overflow-scrolling: touch;
+  background: transparent !important;
+}
+
+/* Page shell: same layered backdrop as Home (landing + auth + inner-layer pages exempt) */
+ion-content:not(.login-content):not(.signup-content):not(.landing-content):not(.home-screen-content):not(.brain-game-category-content) {
+  --background: var(--app-home-atmosphere-bg) !important;
+  --ion-background-color: transparent !important;
+}
+
+ion-content:not(.login-content):not(.signup-content):not(.landing-content):not(.home-screen-content):not(.brain-game-category-content)::part(background) {
+  background: var(--app-home-atmosphere-bg) !important;
+}
+
+/* Landing + auth: keep existing hero / photography (first page, login, signup) */
+ion-content.login-content,
+ion-content.signup-content,
+ion-content.landing-content {
+  --background: transparent !important;
+  --ion-background-color: transparent !important;
+  background: transparent !important;
+  color: var(--app-text) !important;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+ion-content.login-content::part(background),
+ion-content.signup-content::part(background),
+ion-content.landing-content::part(background) {
+  background: transparent !important;
+}
+
+/*
+ * Home + brain category: transparent host; first child uses .home-screen-bg / .app-shell-atmosphere
+ * (same paint token as --app-home-atmosphere-bg).
+ */
+ion-content.lavender-content.home-screen-content,
+ion-content.lavender-content.brain-game-category-content {
+  --background: transparent !important;
+  --ion-background-color: transparent !important;
+  background: transparent !important;
+}
+
+ion-content.lavender-content.home-screen-content::part(background),
+ion-content.lavender-content.brain-game-category-content::part(background) {
+  background: transparent !important;
+}
+
+.app-shell-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--app-home-atmosphere-bg);
+}
+
+/* Standard page container spacing (matches Home max width + horizontal inset) */
+.lavender-container,
+.app-container {
+  padding: 16px 20px !important;
+  padding-bottom: 118px !important;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+/* Readable text — avoid clipped or overflowing copy */
+ion-content :where(h1, h2, h3, h4, p, ion-label, .app-header__title, .app-header__subtitle) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+ion-content :where(.cute-card, .app-card, .action-text, .header-text, .welcome-text, .card-header) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Make welcome header consistent on every page */
+.welcome-section {
+  flex-shrink: 0;
+}
+
+/* Global overlays/modals (Name That Memory / Settings style) */
+.picker-overlay,
+.detail-overlay,
+.edit-overlay {
+  background: var(--app-modal-backdrop-fill, var(--app-overlay)) !important;
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, var(--app-overlay-blur))) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, var(--app-overlay-blur))) saturate(1.05) !important;
+}
+
+.picker-overlay .picker-modal,
+.detail-overlay .detail-card,
+.edit-overlay .edit-card {
+  background: var(--app-modal-bg) !important;
+  border-radius: var(--app-modal-radius) !important;
+  box-shadow: none !important;
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38)) !important;
+  max-width: min(var(--app-modal-sheet-max-width, 400px), calc(100vw - 32px)) !important;
+}
+
+.picker-overlay .picker-close,
+.detail-overlay .close-btn,
+.edit-overlay .close-btn {
+  color: var(--app-primary) !important;
+}
+
+
+.app-content {
+  padding: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Design system — shared across pages (Home visual language)
+   -------------------------------------------------------------------------- */
+
+.app-section-title {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-primary);
+  margin: 0 0 8px 0;
+  line-height: 1.25;
+}
+
+.app-card {
+  background: var(--app-surface);
+  color: var(--app-text);
+  border-radius: var(--app-radius-lg);
+  box-shadow: var(--app-shadow-card);
+  border: 2px solid rgba(var(--app-primary-rgb), 0.08);
+  padding: 18px 20px;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+.app-card--purple {
+  background: var(--app-gradient-button);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--app-shadow-soft);
+}
+
+.app-button {
+  --border-radius: var(--app-radius-md);
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  min-height: 48px;
+  text-transform: none;
+}
+
+ion-button.app-button-solid {
+  --background: var(--app-gradient-button);
+  --background-activated: var(--app-gradient-button-hover);
+  --background-focused: var(--app-gradient-button-hover);
+  --color: #ffffff;
+  --box-shadow: none;
+  --border-radius: var(--app-radius-md);
+  font-weight: 700;
+  font-size: 16px;
+  min-height: 52px;
+}
+
+ion-button.app-button-outline {
+  --border-radius: var(--app-radius-md);
+  --border-width: 2px;
+  --border-color: var(--app-primary);
+  --color: var(--app-primary);
+  --background: rgba(var(--app-primary-rgb), 0.06);
+  font-weight: 700;
+  font-size: 16px;
+  min-height: 48px;
+}
+
+ion-toolbar.app-toolbar-purple {
+  --background: var(--app-gradient-nav);
+  --color: #ffffff;
+  --border-width: 0;
+  box-shadow: 0 4px 20px rgba(var(--app-primary-rgb), 0.25);
+
+  ion-title,
+  .toolbar-title,
+  .header-title {
+    --color: #ffffff;
+    color: #ffffff;
+    font-weight: 800;
+  }
+
+  ion-button,
+  ion-back-button {
+    --color: #ffffff;
+    color: #ffffff;
+  }
+
+  /* Back arrow: circular tap target on purple bar */
+  ion-buttons[slot='start'] ion-button[fill='clear'] {
+    --background: rgba(255, 255, 255, 0.18) !important;
+    --background-activated: rgba(255, 255, 255, 0.28) !important;
+    --color: #ffffff !important;
+    --border-radius: 50% !important;
+    --border-width: 1.5px !important;
+    --border-style: solid !important;
+    --border-color: rgba(255, 255, 255, 0.35) !important;
+    --box-shadow: none !important;
+    --padding-start: 0 !important;
+    --padding-end: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: 0;
+    border-radius: 50% !important;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  ion-buttons[slot='start'] ion-button[fill='clear']::part(native) {
+    border-radius: 50% !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+  }
+
+  .score-display .score-number,
+  .score-display .score-label {
+    color: #ffffff;
+  }
+}
+
+ion-content.game-home-screen,
+ion-content.mini-games-screen,
+ion-content.sequence-game-screen,
+ion-content.matching-game-screen,
+ion-content.word-game-screen {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 8px;
+}
+
+/* Login/signup: avoid global .app-container top/side padding so brand aligns with landing. */
+ion-content.login-content .app-container,
+ion-content.signup-content .app-container {
+  padding-top: 0 !important;
+  padding-left: max(20px, env(safe-area-inset-left)) !important;
+  padding-right: max(20px, env(safe-area-inset-right)) !important;
+  padding-bottom: max(32px, env(safe-area-inset-bottom)) !important;
+}
+
+/* Full-bleed hero like landing — do not cap at 520px (that shrinks bg + brand vs first page). */
+ion-content.login-content .app-container.auth-with-hero,
+ion-content.signup-content .app-container.auth-with-hero {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+}
+
+ion-content.patient-details-screen .app-container {
+  padding-bottom: 32px !important;
+}
+
+ion-content .lavender-form.app-container {
+  padding-bottom: 40px !important;
+}
+
+ion-button.btn-grad-purple {
+  --background: var(--app-gradient-button);
+  --background-activated: var(--app-gradient-button-hover);
+  --color: #ffffff;
+  --border-radius: var(--app-radius-md);
+  --box-shadow: none;
+  font-weight: 700;
+  font-size: 16px;
+  min-height: 52px;
+}
+
+/* --------------------------------------------------------------------------
+   Reference layout — header, progress hero, main cards, bottom nav
+   -------------------------------------------------------------------------- */
+
+/* ---------- App header (reference: avatar left, copy right, actions top-right on home) ---------- */
+
+.app-header {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0 8px;
+}
+
+.app-header--home {
+  padding-top: 8px;
+  padding-right: 52px;
+  padding-bottom: 20px;
+}
+
+.app-header__settings-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  margin: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.app-header__settings-corner ion-icon {
+  font-size: 34px;
+  color: var(--app-primary);
+}
+
+.app-header__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px 24px;
+  width: 100%;
+}
+
+.app-header--with-back {
+  padding-right: 0;
+}
+
+.app-header--with-back .app-header__row {
+  gap: 14px 18px;
+}
+
+.app-header__leading {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.app-profile-photo {
+  width: 92px;
+  height: 92px;
+  min-width: 92px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid rgba(var(--app-primary-rgb), 0.18);
+  box-shadow: var(--app-shadow-card);
+  background: var(--app-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-header--home .app-header__avatar.app-profile-photo {
+  width: 112px;
+  height: 112px;
+  min-width: 112px;
+  border-width: 4px;
+}
+
+.app-profile-photo--icon ion-icon {
+  font-size: 44px;
+  color: var(--app-primary);
+}
+
+.app-profile-photo__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-header__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.app-header__title {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(1.25rem, 4.2vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--app-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.app-header__title.app-header__title--home-welcome {
+  text-transform: none;
+  letter-spacing: -0.03em;
+}
+
+.app-header__welcome-prefix {
+  color: #111827;
+  font-weight: 800;
+}
+
+.app-header__welcome-name {
+  color: var(--app-primary);
+  font-weight: 800;
+}
+
+.app-header__subtitle {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(1.05rem, 3.4vw, 1.2rem);
+  font-weight: 600;
+  color: var(--app-muted);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.app-header .settings-btn:not(.app-header__settings-corner),
+.app-header .add-btn,
+.app-header__settings {
+  flex-shrink: 0;
+  margin: 0;
+  align-self: center;
+}
+
+.app-header .settings-btn ion-icon,
+.app-header .add-btn ion-icon {
+  font-size: 32px;
+  color: var(--app-primary);
+}
+
+/* ---------- Today’s progress (reference: icon | number | caption row) ---------- */
+
+.app-progress-section {
+  position: relative;
+}
+
+.app-progress-section__toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 12px;
+}
+
+.app-progress-section__section-title {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(1.05rem, 3.4vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--app-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.app-progress-section__chev-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: rgba(var(--app-primary-rgb), 0.1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-progress-section__chev-btn ion-icon {
+  font-size: 22px;
+  color: var(--app-primary);
+}
+
+.app-progress-section__hero-toggle {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 20px 20px;
+  border: none;
+  border-top: 1px solid rgba(var(--app-primary-rgb), 0.08);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-progress-section__hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  width: 100%;
+}
+
+.app-progress-section__icon {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 20px;
+  background: var(--app-gradient-button);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--app-shadow-soft);
+}
+
+.app-progress-section__icon ion-icon {
+  font-size: 36px;
+  color: #ffffff;
+}
+
+.app-progress-section__value {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(3rem, 14vw, 4.25rem);
+  font-weight: 800;
+  color: var(--app-primary);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.app-progress-section__caption {
+  flex-shrink: 0;
+  max-width: 42%;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.app-progress-section__caption-line {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.app-progress-section__caption-line--primary {
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--app-primary);
+}
+
+.app-progress-section__caption-line--secondary {
+  font-size: clamp(0.8rem, 2.6vw, 0.95rem);
+  font-weight: 600;
+  color: var(--app-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Stacked purple action cards ---------- */
+
+.app-action-cards,
+.app-main-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 10px;
+}
+
+.app-action-card,
+.app-main-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 22px;
+  min-height: 124px;
+  padding: 26px 24px;
+  border-radius: 28px;
+  background: var(--app-gradient-button);
+  color: #ffffff;
+  box-shadow: var(--app-shadow-soft);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.app-action-card:active,
+.app-main-card:active {
+  transform: scale(0.98);
+}
+
+.app-action-card .app-card-icon,
+.app-main-card .app-card-icon {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.app-action-card .app-card-icon ion-icon,
+.app-main-card .app-card-icon ion-icon {
+  font-size: 40px;
+  color: #ffffff;
+}
+
+.app-card-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-card-text__title {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: clamp(1.05rem, 3.4vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.app-card-text__subtitle {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Custom category row: keep actions on the right */
+.app-action-card.custom-action,
+.app-main-card.custom-action {
+  flex-wrap: nowrap;
+}
+
+.app-action-card.custom-action .card-actions,
+.app-main-card.custom-action .card-actions {
+  flex-shrink: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-action-card.custom-action .action-btn,
+.app-main-card.custom-action .action-btn {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-action-card.custom-action .action-btn ion-icon,
+.app-main-card.custom-action .action-btn ion-icon {
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.app-action-card.custom-action .delete-btn,
+.app-main-card.custom-action .delete-btn {
+  border-color: rgba(255, 200, 200, 0.7);
+  background: rgba(220, 38, 38, 0.25);
+}
+
+@keyframes app-bottom-nav-glow {
+  from {
+    box-shadow:
+      0 0 14px rgba(255, 255, 255, 0.55),
+      0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+  to {
+    box-shadow:
+      0 0 24px rgba(255, 255, 255, 0.85),
+      0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/*
+ * Floating pill bottom navigation (all caregiver + patient footers)
+ * — equal grid columns; uniform icon size and alignment
+ */
+.caregiver-bottom-nav,
+.patient-bottom-nav {
+  position: fixed;
+  z-index: 10000;
+  left: max(10px, env(safe-area-inset-left, 0px));
+  right: max(10px, env(safe-area-inset-right, 0px));
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 22px;
+  background: var(--app-gradient-nav);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 12px 40px rgba(var(--app-primary-rgb), 0.38),
+    0 4px 14px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: 6px 8px 8px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.patient-bottom-nav {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.caregiver-bottom-nav .nav-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 2px 0 0;
+  box-sizing: border-box;
+}
+
+.patient-bottom-nav .nav-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: visible;
+  padding-top: 2px;
+}
+
+.caregiver-bottom-nav .nav-item,
+.patient-bottom-nav .nav-item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.78);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Equal horizontal share: same width per tab → even gaps between icon centers */
+.caregiver-bottom-nav .nav-item {
+  flex: 1 1 0;
+  width: auto;
+  max-width: none;
+}
+
+.patient-bottom-nav .nav-item {
+  width: auto;
+  max-width: none;
+}
+
+/* Only the current route tab is full opacity + bold; others stay softer */
+.caregiver-bottom-nav .nav-item:not(.caregiver-mode):not(.active),
+.patient-bottom-nav .nav-item:not(.caregiver-mode):not(.active) {
+  opacity: 0.52;
+}
+
+.caregiver-bottom-nav .nav-item:not(.caregiver-mode).active,
+.patient-bottom-nav .nav-item:not(.caregiver-mode).active {
+  opacity: 1;
+}
+
+/* Caregiver center: same dim as inactive tabs until pressed or marked .active (patient bar) */
+.caregiver-bottom-nav .nav-item.caregiver-mode:not(.active):not(:active) {
+  opacity: 0.52;
+}
+
+.caregiver-bottom-nav .nav-item.caregiver-mode.active,
+.caregiver-bottom-nav .nav-item.caregiver-mode:active {
+  opacity: 1;
+}
+
+.patient-bottom-nav .nav-item.caregiver-mode {
+  opacity: 1;
+}
+
+.caregiver-bottom-nav .nav-item:hover,
+.patient-bottom-nav .nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.caregiver-bottom-nav .nav-item.active:not(.caregiver-mode),
+.patient-bottom-nav .nav-item.active:not(.caregiver-mode) {
+  color: #fff;
+}
+
+/* All footer tabs: same circle size, alignment, and spacing */
+.caregiver-bottom-nav .nav-item .nav-icon,
+.patient-bottom-nav .nav-item .nav-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.caregiver-bottom-nav .nav-item .nav-icon ion-icon,
+.patient-bottom-nav .nav-item .nav-icon ion-icon {
+  font-size: 20px;
+  color: #fff;
+  display: block;
+  margin: 0;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Lock outlines match other tab icons; slight optical bump so it doesn’t read smaller */
+.caregiver-bottom-nav .nav-item.caregiver-mode .nav-icon ion-icon,
+.patient-bottom-nav .nav-item.caregiver-mode .nav-icon ion-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+/* Selected route OR caregiver while pressed / patient-mode lock */
+.caregiver-bottom-nav .nav-item.active .nav-icon,
+.patient-bottom-nav .nav-item.active .nav-icon,
+.caregiver-bottom-nav .nav-item.caregiver-mode:active .nav-icon,
+.patient-bottom-nav .nav-item.caregiver-mode:active .nav-icon {
+  background: #fff;
+  border-color: rgba(255, 255, 255, 0.95);
+  animation: app-bottom-nav-glow 2.2s ease-in-out infinite alternate;
+}
+
+.caregiver-bottom-nav .nav-item.active .nav-icon ion-icon,
+.patient-bottom-nav .nav-item.active .nav-icon ion-icon,
+.caregiver-bottom-nav .nav-item.caregiver-mode:active .nav-icon ion-icon,
+.patient-bottom-nav .nav-item.caregiver-mode:active .nav-icon ion-icon {
+  color: var(--app-primary);
+}
+
+.caregiver-bottom-nav .nav-label,
+.patient-bottom-nav .nav-label {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.82);
+  width: 100%;
+  max-width: 100%;
+  min-height: 1.2em;
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    opacity 0.2s ease,
+    font-weight 0.15s ease,
+    color 0.2s ease;
+}
+
+/* Bold label only for the selected route */
+.caregiver-bottom-nav .nav-item.active:not(.caregiver-mode) .nav-label,
+.patient-bottom-nav .nav-item.active:not(.caregiver-mode) .nav-label {
+  font-weight: 800;
+  color: #fff;
+}
+
+.caregiver-bottom-nav .nav-item.caregiver-mode.active .nav-label,
+.patient-bottom-nav .nav-item.caregiver-mode.active .nav-label,
+.caregiver-bottom-nav .nav-item.caregiver-mode:active .nav-label,
+.patient-bottom-nav .nav-item.caregiver-mode:active .nav-label {
+  font-weight: 800;
+  color: #fff;
+  opacity: 1;
+}
+
+.app-bottom-nav .nav-container {
+  max-width: 100%;
+}
+
+ion-tab-bar.app-tab-bar {
+  --background: var(--app-gradient-nav);
+  --color: rgba(255, 255, 255, 0.75);
+  --color-selected: #ffffff;
+  --border: 0;
+  border-radius: 26px;
+  margin-top: 0;
+  margin-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  margin-left: max(10px, env(safe-area-inset-left, 0px));
+  margin-right: max(10px, env(safe-area-inset-right, 0px));
+  padding-top: 8px;
+  padding-bottom: 8px;
+  min-height: 60px;
+  width: auto;
+  max-width: 520px;
+  align-self: center;
+  box-shadow:
+    0 12px 36px rgba(var(--app-primary-rgb), 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+ion-tab-bar.app-tab-bar ion-tab-button.tab-selected,
+ion-tab-bar.app-tab-bar ion-tab-button.ion-selected {
+  --color: #ffffff;
+}
+
+ion-tab-bar.app-tab-bar ion-icon,
+ion-tab-bar.app-tab-bar ion-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+ion-tab-bar.app-tab-bar ion-tab-button.tab-selected ion-icon,
+ion-tab-bar.app-tab-bar ion-tab-button.ion-selected ion-icon,
+ion-tab-bar.app-tab-bar ion-tab-button.tab-selected ion-label,
+ion-tab-bar.app-tab-bar ion-tab-button.ion-selected ion-label {
+  color: #ffffff;
+}
+
+ion-tab-bar.app-tab-bar ion-tab-button[aria-selected='true'] ion-icon,
+ion-tab-bar.app-tab-bar ion-tab-button[aria-selected='true'] ion-label {
+  color: #ffffff;
+  opacity: 1;
+}
+
+ion-segment.app-segment {
+  --background: rgba(var(--app-primary-rgb), 0.08);
+  border-radius: var(--app-radius-md);
+  padding: 4px;
+  min-height: 48px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+ion-segment.app-segment ion-segment-button {
+  --indicator-color: var(--app-gradient-button);
+  --color: var(--app-primary);
+  --color-checked: #ffffff;
+  --border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  min-height: 44px;
+  flex: 1 1 0;
+  min-width: 0;
+  --padding-start: 6px;
+  --padding-end: 6px;
+}
+
+ion-segment.app-segment ion-segment-button ion-label {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  text-align: center;
+}
+
+/* Uniform strictly oblong (pill) buttons app-wide — no square/circle CTAs */
+ion-button {
+  --border-radius: var(--app-button-pill-radius, 999px) !important;
+  --border-width: 0 !important;
+  --box-shadow: none !important;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: var(--app-button-font-weight, 700) !important;
+  font-size: var(--app-button-font-size, 15px) !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  min-height: var(--app-button-min-height, 44px);
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+}
+
+ion-button::part(native) {
+  box-shadow: none !important;
+}
+
+ion-fab-button {
+  --box-shadow: none !important;
+  --border-radius: 999px !important;
+  --border-width: 0 !important;
+  width: 56px !important;
+  height: 48px !important;
+}
+
+ion-fab-button::part(native) {
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+
+ion-button[size='small'] {
+  min-height: 40px;
+  font-size: 14px !important;
+  --padding-start: 14px;
+  --padding-end: 14px;
+}
+
+ion-button[fill='outline'] {
+  --background: #ffffff !important;
+  --background-activated: rgba(var(--app-primary-rgb), 0.1) !important;
+  --background-focused: #ffffff !important;
+  --border-width: 1.5px !important;
+  --border-style: solid !important;
+  --border-color: rgba(var(--app-primary-rgb), 0.38) !important;
+  --color: var(--app-primary) !important;
+  --box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+ion-button[fill='solid']:not([color='danger']):not([color='medium']):not([color='light']) {
+  --background: var(--app-gradient-button) !important;
+  --background-activated: var(--app-gradient-button-hover) !important;
+  --background-focused: var(--app-gradient-button) !important;
+  --background-hover: var(--app-gradient-button-hover) !important;
+  --border-width: 0 !important;
+  --box-shadow: none !important;
+}
+
+ion-button[fill='solid'][color='danger'] {
+  --border-width: 0 !important;
+  --box-shadow: none !important;
+}
+
+ion-button[fill='clear'] {
+  --background: transparent !important;
+  font-weight: 600 !important;
+}
+
+/* Back controls: 44px circle + light border (headers / pages using .back-btn) */
+ion-button.back-btn {
+  --border-radius: 50% !important;
+  --background: rgba(255, 255, 255, 0.96) !important;
+  --background-activated: rgba(var(--app-primary-rgb), 0.1) !important;
+  --color: var(--app-primary) !important;
+  --border-width: 1.5px !important;
+  --border-style: solid !important;
+  --border-color: rgba(var(--app-primary-rgb), 0.22) !important;
+  --box-shadow: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  margin: 0;
+  border-radius: 50% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+ion-button.back-btn::part(native) {
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+}
+
+ion-button.back-btn ion-icon {
+  color: var(--app-primary);
+  font-size: 22px;
+}
+
+/* Header + / add actions — same circular shell as back (no shadow) */
+ion-button.add-btn,
+ion-button.add-category-btn {
+  --border-radius: 50% !important;
+  --background: rgba(255, 255, 255, 0.96) !important;
+  --background-activated: rgba(var(--app-primary-rgb), 0.1) !important;
+  --background-hover: rgba(255, 255, 255, 1) !important;
+  --background-focused: rgba(255, 255, 255, 0.96) !important;
+  --color: var(--app-primary) !important;
+  --border-width: 1.5px !important;
+  --border-style: solid !important;
+  --border-color: rgba(var(--app-primary-rgb), 0.22) !important;
+  --box-shadow: none !important;
+  --ripple-color: rgba(var(--app-primary-rgb), 0.12) !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  margin: 0;
+  border-radius: 50% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+ion-button.add-btn::part(native),
+ion-button.add-category-btn::part(native) {
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+}
+
+ion-button.add-btn ion-icon,
+ion-button.add-category-btn ion-icon {
+  color: var(--app-primary) !important;
+  font-size: 24px !important;
+}
+
+/* Modal / form headers (e.g. add-flashcard) — circular back */
+ion-toolbar.lavender-header ion-buttons[slot='start'] ion-button[fill='clear'] {
+  --background: rgba(var(--app-primary-rgb), 0.08) !important;
+  --background-activated: rgba(var(--app-primary-rgb), 0.14) !important;
+  --color: var(--app-primary) !important;
+  --border-radius: 50% !important;
+  --border-width: 1.5px !important;
+  --border-style: solid !important;
+  --border-color: rgba(var(--app-primary-rgb), 0.22) !important;
+  --box-shadow: none !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  border-radius: 50% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+ion-toolbar.lavender-header ion-buttons[slot='start'] ion-button[fill='clear']::part(native) {
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+}
+
+/* --------------------------------------------------------------------------
+   Form inputs — no Material-style underlines / item hairlines
+   -------------------------------------------------------------------------- */
+ion-item:has(ion-input),
+ion-item:has(ion-textarea),
+ion-item:has(ion-select),
+ion-item:has(ion-datetime) {
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-height: 0 !important;
+}
+
+ion-input,
+ion-textarea,
+ion-select {
+  --highlight-color-focused: transparent;
+  --highlight-color-valid: transparent;
+  --highlight-color-invalid: transparent;
+}
+
+/* Ionic “fill=outline” etc. — hide bottom highlight line */
+ion-input.ion-touched,
+ion-textarea.ion-touched {
+  --highlight-color-focused: transparent;
+}
+
+/* Eye toggles (password show/hide) — keep big + consistent */
+ion-button.eye-btn ion-icon,
+ion-button.pin-eye-btn ion-icon,
+ion-button.eye-btn::part(native) ion-icon,
+ion-button.pin-eye-btn::part(native) ion-icon {
+  font-size: 24px !important;
+  opacity: 1 !important;
+}
+
+/* Outline actions in sheets — border follows pill radius (no outward bleed) */
+ion-modal ion-button[fill='outline']::part(native) {
+  box-sizing: border-box !important;
+}
+
+/* Patient Mode / Standard Mode — top banners (no modal) */
+ion-toast.app-toast-patient-mode-on {
+  --background: #16a34a;
+  --color: #ffffff;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 28px rgba(22, 101, 52, 0.35);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+ion-toast.app-toast-standard-mode-on {
+  --background: #64748b;
+  --color: #ffffff;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 28px rgba(51, 65, 85, 0.3);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+ion-toast.app-toast-patient-mode-on::part(container),
+ion-toast.app-toast-standard-mode-on::part(container) {
+  margin-top: max(8px, env(safe-area-inset-top));
+}
+
+/* Home-style cards + buttons (reusable across pages) */
+.cute-card {
+  background: var(--app-surface);
+  border-radius: var(--app-radius-lg);
+  box-shadow: var(--app-shadow-card);
+  border: 2px solid rgba(var(--app-primary-rgb), 0.08);
+}
+
+.welcome-section .welcome-content {
+  background: linear-gradient(180deg, #ffffff 0%, #faf6ef 100%);
+  border: 2px solid rgba(var(--app-primary-rgb), 0.12);
+  border-radius: var(--app-radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  box-shadow: var(--app-shadow-card);
+  flex-wrap: nowrap;
+}
+
+.welcome-section .welcome-icon {
+  background: var(--app-gradient-button);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.welcome-section .welcome-text h1 {
+  font-size: clamp(1rem, 2.8vw, 1.2rem);
+  font-weight: 800;
+  color: var(--app-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.welcome-section .welcome-text p {
+  font-size: 16px;
+  color: var(--app-muted);
+  margin: 0;
+  font-weight: 600;
+}
+
+.welcome-section .settings-btn ion-icon {
+  font-size: 30px;
+  color: var(--app-primary);
+}
+
+
+ion-card, .glass-card, .game-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Frosted scrim — blur content behind alerts/modals (ion-backdrop + fallbacks) */
+ion-backdrop {
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72)) !important;
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+}
+
+/* Some Ionic overlay stacks use a plain div scrim */
+.ion-overlay-wrapper ion-backdrop,
+.ion-page > ion-backdrop {
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+}
+
+// Global alerts — match signup-role-sheet card (no borders, centered type)
+ion-alert {
+  --backdrop-opacity: var(--app-modal-scrim-opacity, 1);
+  --max-width: min(var(--app-modal-sheet-max-width, 400px), 92vw);
+  --background: transparent;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+
+  &.sc-ion-alert-md,
+  &.sc-ion-alert-ios {
+    background: transparent !important;
+  }
+
+  .alert-wrapper {
+    max-width: min(var(--app-modal-sheet-max-width, 400px), 92vw) !important;
+    background: #ffffff !important;
+    border-radius: var(--app-modal-radius, 24px) !important;
+    box-shadow: none !important;
+    border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38)) !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+  }
+
+  .alert-head {
+    padding: 14px 16px 4px !important;
+    text-align: center !important;
+
+    .alert-title {
+      color: var(--app-primary) !important;
+      font-weight: 700 !important;
+      font-size: 1.35rem !important;
+      letter-spacing: -0.02em !important;
+      line-height: 1.25 !important;
+    }
+
+    .alert-sub-title {
+      color: #64748b !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+    }
+  }
+
+  .alert-message {
+    color: #64748b !important;
+    padding: 4px 16px 10px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1.55 !important;
+    text-align: center !important;
+  }
+
+  .alert-input-wrapper {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    border: 1.5px solid rgba(var(--app-primary-rgb), 0.22) !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+
+    .alert-input {
+      color: var(--app-text) !important;
+      border: 0 !important;
+      outline: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      padding: 12px 14px !important;
+      margin: 0 !important;
+      font-size: 14px !important;
+
+      &::placeholder {
+        color: rgba(100, 116, 139, 0.9) !important;
+      }
+    }
+  }
+
+  .alert-input-group {
+    padding: 0 16px 4px !important;
+  }
+
+  .alert-button-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding: 6px 12px 8px !important;
+    gap: 10px !important;
+
+    .alert-button {
+      flex: 0 0 auto !important;
+      width: auto !important;
+      min-width: 72px !important;
+      border-radius: var(--app-button-pill-radius, 999px) !important;
+      font-weight: var(--app-button-font-weight, 700) !important;
+      font-size: var(--app-button-font-size, 15px) !important;
+      min-height: var(--app-button-min-height, 44px) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      text-transform: none !important;
+      letter-spacing: 0.01em !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      box-shadow: none !important;
+      overflow: hidden !important;
+
+      &.alert-button-role-cancel {
+        order: 1 !important;
+        color: var(--app-primary) !important;
+        background: #ffffff !important;
+        border: 1.5px solid rgba(var(--app-primary-rgb), 0.38) !important;
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+      }
+
+      &:not(.alert-button-role-cancel):not(.alert-button-role-destructive) {
+        order: 2 !important;
+        color: var(--ion-color-primary-contrast) !important;
+        background: var(--app-gradient-button) !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      &.alert-button-role-destructive {
+        order: 2 !important;
+        color: #ffffff !important;
+        background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%) !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+
+    .alert-button-inner {
+      border-radius: var(--app-button-pill-radius, 999px) !important;
+      box-shadow: none !important;
+      text-transform: inherit !important;
+      letter-spacing: inherit !important;
+      font-weight: inherit !important;
+      font-size: inherit !important;
+      min-height: var(--app-button-min-height, 44px) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 18px !important;
+      box-sizing: border-box !important;
+      background-clip: padding-box !important;
+    }
+  }
+}
+
+/* App-wide confirm modal — signup-sized sheet; tap backdrop = dismiss (cancel) */
+ion-modal {
+  --backdrop-opacity: var(--app-modal-scrim-opacity, 1);
+  --box-shadow: none;
+  --background: transparent;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+ion-modal::part(backdrop) {
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72)) !important;
+}
+
+ion-modal::part(content) {
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38)) !important;
+  border-radius: var(--app-modal-radius, 24px) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+ion-modal.app-confirm-modal {
+  --width: min(var(--app-modal-sheet-max-width, 400px), 92vw);
+  --max-width: 92vw;
+  --height: fit-content;
+  --max-height: min(92vh, 640px);
+  --border-radius: var(--app-modal-radius, 24px);
+  --border-width: 0;
+  --border-color: transparent;
+  --box-shadow: none;
+}
+
+ion-modal.app-confirm-modal::part(content) {
+  border-radius: var(--app-modal-radius, 24px);
+  outline: none;
+  box-shadow: none;
+  overflow: hidden;
+  height: fit-content;
+  max-height: min(92vh, 640px);
+}
+
+ion-popover {
+  --backdrop-opacity: var(--app-modal-scrim-opacity, 1);
+  --box-shadow: none;
+}
+
+ion-popover::part(backdrop) {
+  backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(var(--app-modal-backdrop-blur, 20px)) saturate(1.05) !important;
+  background: var(--app-modal-backdrop-fill, rgba(252, 250, 255, 0.72)) !important;
+}
+
+ion-popover::part(content) {
+  box-shadow: none !important;
+  border: var(--app-modal-outline, 1.5px solid rgba(var(--app-primary-rgb), 0.38)) !important;
+}
+
+// Global action sheet styling (dark). Light variant: `patient-dashboard-light-sheet` on ion-action-sheet.
+ion-action-sheet {
+  .action-sheet-wrapper {
+    background: radial-gradient(circle at top, rgba(255,255,255,0.15), transparent 55%),
+                rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(20px);
+  }
+  
+  .action-sheet-group {
+    background: transparent !important;
+    
+    .action-sheet-title {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
+    .action-sheet-button {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      
+      &.action-sheet-destructive {
+        color: #ef4444 !important;
+      }
+      
+      &.action-sheet-cancel {
+        background: rgba(255, 255, 255, 0.15) !important;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+/* My Patients: anchored white popover menus (three-dots / avatar) */
+ion-popover.patient-dashboard-menu-popover {
+  --width: min(288px, calc(100vw - 24px));
+  --background: #ffffff;
+  --box-shadow: none;
+}
+
+ion-popover.patient-dashboard-menu-popover::part(content) {
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+ion-popover.patient-dashboard-menu-popover::part(arrow) {
+  --arrow-color: #ffffff;
+}
+
+/* Small anchored popover for birthday calendar (not full-screen) */
+ion-popover.compact-birthday-popover {
+  --width: min(304px, calc(100vw - 24px));
+  /* ion-popover .popover-content uses overflow: auto — keep max-height above
+     calendar + custom footer so nothing scrolls inside the popover */
+  --max-height: min(560px, 92vh);
+}
+
+ion-popover.compact-birthday-popover::part(content) {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.compact-birthday-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.compact-birthday-inner ion-datetime {
+  width: 100%;
+  max-width: 100%;
+}
+
+.compact-birthday-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  padding-top: 4px;
+  margin-top: 4px;
+  border-top: 1px solid rgba(var(--app-primary-rgb, 121, 68, 148), 0.12);
+}
+
+@import "@ionic/angular/css/core.css";
+
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+
+
+
+
+@import "@ionic/angular/css/palettes/dark.system.css";

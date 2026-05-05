@@ -1,0 +1,195 @@
+<ion-content class="lavender-content" [fullscreen]="true" id="video-memories-page">
+  
+  <div class="lavender-container">
+    
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="goBack()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">Video Memories</h1>
+          <p class="app-header__subtitle">Your magical memory companion</p>
+        </div>
+      </div>
+      <div gh-right>
+        <ion-button class="add-btn" fill="clear" *ngIf="!isPatientMode" (click)="openAddMenu()" aria-label="Add Video">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </app-global-header>
+
+    
+    <div *ngIf="videos.length === 0" class="empty-state">
+      <ion-icon class="empty-icon" name="videocam-outline"></ion-icon>
+      <h2 class="empty-title">No Videos yet</h2>
+      <p class="empty-subtitle" *ngIf="!isPatientMode">Tap the + to add a memory.</p>
+      <ion-button class="empty-btn" *ngIf="!isPatientMode" (click)="openAddMenu()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Add Video
+      </ion-button>
+    </div>
+
+    
+    <div class="gallery-container" *ngIf="videos.length > 0">
+      
+      <div class="selection-header" *ngIf="isSelectionMode">
+        <div class="selection-controls">
+          <ion-button fill="clear" class="cancel-btn" (click)="toggleSelectionMode()">
+            <ion-icon name="close" slot="start"></ion-icon>
+            Cancel
+          </ion-button>
+          
+          <ion-button fill="clear" class="select-all-btn" (click)="selectAllVideos()" [disabled]="selectedVideos.size === videos.length">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Select&nbsp;All
+          </ion-button>
+          
+          <ion-button fill="clear" class="delete-btn" (click)="deleteSelectedVideos()" [disabled]="selectedVideos.size === 0">
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+        
+        <div class="selection-count">{{ selectedVideos.size }} selected</div>
+      </div>
+
+      <div class="gallery-grid">
+        <div
+          class="gallery-item"
+          [class.selected]="selectedVideos.has(video.id)"
+          *ngFor="let video of videos; let i = index"
+          (click)="isSelectionMode ? toggleVideoSelection(video.id) : openDetailView(video, i)">
+          
+          <div class="video-thumbnail">
+            <video
+              class="video-preview"
+              [src]="video.src"
+              [poster]="video.poster || placeholderDataUrl"
+              muted
+              autoplay
+              playsinline
+              loop
+              preload="metadata"
+              (error)="onThumbVideoError($event, video)">
+            </video>
+            
+            <div class="play-overlay">
+              <ion-icon name="play"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isSelectionMode && videos.length > 0 && !isPatientMode">
+      <ion-fab-button class="select-multiple-fab" (click)="toggleSelectionMode()">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+
+  
+  <div class="detail-overlay" *ngIf="showDetailModal" (click)="closeDetailView()">
+    <button class="nav-btn prev-btn" (click)="goToPreviousVideo(); $event.stopPropagation()" *ngIf="videos.length > 1" [disabled]="selectedVideoIndex <= 0">
+      <ion-icon name="chevron-back"></ion-icon>
+    </button>
+
+    <div class="detail-card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeDetailView()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      
+      <h3 class="card-title">{{ selectedVideo?.label || 'Video Memory' }}</h3>
+      
+      <div class="video-container" *ngIf="selectedVideo">
+        <video
+          #detailVideoRef
+          class="card-video"
+          [src]="selectedVideo.src"
+          [poster]="selectedVideo.poster || ''"
+          preload="metadata"
+          (loadedmetadata)="onDetailVideoLoaded()"
+          (timeupdate)="onDetailVideoTimeUpdate()"
+          (click)="toggleDetailVideoPlay()">
+        </video>
+        
+        <div class="play-overlay" *ngIf="!isDetailVideoPlaying" (click)="toggleDetailVideoPlay()">
+          <ion-icon name="play"></ion-icon>
+        </div>
+      </div>
+      
+      <div class="card-info" *ngIf="selectedVideo">
+        <span class="info-value">{{ selectedVideo.createdAt | date:'MMM d, y • h:mm a' }}</span>
+      </div>
+      
+      <div class="video-counter" *ngIf="videos.length > 1">
+        {{ selectedVideoIndex + 1 }} of {{ videos.length }}
+      </div>
+      
+      <div class="card-actions" *ngIf="!isPatientMode">
+        <button type="button" class="action-btn edit-btn" (click)="editVideo(selectedVideo)">
+          <ion-icon name="create-outline"></ion-icon>
+          Edit
+        </button>
+        
+        <button type="button" class="action-btn delete-btn" (click)="selectedVideo && deleteVideoFromDetail(selectedVideo)">
+          <ion-icon name="trash-outline"></ion-icon>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <button class="nav-btn next-btn" (click)="goToNextVideo(); $event.stopPropagation()" *ngIf="videos.length > 1" [disabled]="selectedVideoIndex >= videos.length - 1">
+      <ion-icon name="chevron-forward"></ion-icon>
+    </button>
+  </div>
+
+  <div class="edit-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="edit-card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeEditModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      
+      <h3 class="edit-title">Edit Video Title</h3>
+      
+      <div class="edit-form">
+        <input 
+          type="text" 
+          class="edit-input" 
+          [(ngModel)]="editVideoTitle" 
+          placeholder="Enter video title"
+          (keyup.enter)="saveVideoEdit()" />
+      </div>
+      
+      <div class="edit-actions">
+        <button type="button" class="action-btn cancel-btn" (click)="closeEditModal()">
+          Cancel
+        </button>
+        <button type="button" class="action-btn save-btn" (click)="saveVideoEdit()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+  <input
+    type="file"
+    accept="video/*"
+    capture="environment"
+    class="hidden-file"
+    #cameraInput
+    (change)="onFilePicked($event, 'camera')" />
+
+  <input
+    type="file"
+    accept="video/*"
+    class="hidden-file"
+    #galleryInput
+    (change)="onFilePicked($event, 'gallery')" />
+</ion-content>

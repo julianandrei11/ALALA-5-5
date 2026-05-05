@@ -1,0 +1,198 @@
+<ion-content class="lavender-content game-home-screen" [fullscreen]="true">
+
+  <div class="lavender-container app-container">
+    <app-global-header>
+      <div gh-left>
+        <ion-buttons>
+          <ion-button class="back-btn" fill="clear" (click)="goBack()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div gh-center>
+        <div class="app-header__body">
+          <h1 class="app-header__title">{{ categoryName || 'Custom Category' }}</h1>
+          <p class="app-header__subtitle">{{ categoryDescription || 'Your memories' }}</p>
+        </div>
+      </div>
+      <div gh-right>
+        <ion-button class="add-btn app-header__settings" fill="clear" [routerLink]="['/add-flashcard']" [queryParams]="{ defaultCategoryId: id }" *ngIf="!isPatientMode" aria-label="Add Card">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </app-global-header>
+  </div>
+
+  <div class="area-actions-top" *ngIf="currentCard && !isPatientMode">
+    <button type="button" class="action-btn edit-btn" (click)="editCurrentCard()">
+      Edit
+    </button>
+    <button type="button" class="action-btn delete-btn" (click)="deleteCurrentCard()">
+      Delete
+    </button>
+  </div>
+  
+  <div class="page-body" style="padding-bottom: 80px;">
+    
+    <div *ngIf="!currentCard" class="empty-state">
+      <ion-icon class="empty-icon" name="grid-outline"></ion-icon>
+      <h2 class="empty-title">No Items yet</h2>
+      <p class="empty-subtitle" *ngIf="!isPatientMode">Tap the + to add an item.</p>
+      <ion-button class="empty-btn" [routerLink]="['/add-flashcard']" [queryParams]="{ defaultCategoryId: id }" *ngIf="!isPatientMode">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Add Item
+      </ion-button>
+    </div>
+
+    
+    <div *ngIf="currentCard" class="places-grid" aria-live="polite">
+
+      <div class="area area-name">
+        <div class="name-row">
+          <div class="name-tag" [title]="currentCard.label || 'Untitled'">
+            {{ currentCard.label || 'Untitled' }}
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="area area-image">
+        <div class="image-container" (click)="openImageModal()">
+          <img
+            [src]="currentCard.image"
+            [alt]="currentCard.label || 'Item'"
+          />
+        </div>
+      </div>
+
+      
+      <div class="area area-controls">
+        <div *ngIf="currentCard.audio" class="audio-player">
+          <ion-button shape="round" size="small" fill="clear" color="primary" (click)="toggleAudio()" class="small-play-btn">
+            <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
+          </ion-button>
+          
+          <div class="audio-timeline">
+            <ion-range
+              min="0"
+              [max]="duration"
+              [value]="currentTime"
+              (ionChange)="seekAudio($event)"
+              step="0.01"
+              color="primary"
+              class="audio-slider">
+            </ion-range>
+            <div class="time-display">
+              <span>{{ formatTime(currentTime) }}</span>
+              <span>{{ formatTime(duration) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="!currentCard.audio" class="no-audio-message">
+          <ion-icon name="volume-mute" color="medium"></ion-icon>
+          <span>No audio available</span>
+        </div>
+      </div>
+
+      
+      <div class="area area-nav">
+        <div class="nav-choices-grid">
+          <button
+            type="button"
+            class="option-button nav-choice"
+            (click)="prevCard()"
+            [disabled]="displayCards.length <= 1"
+            aria-label="Previous"
+          >
+            <ion-icon name="arrow-back-outline" class="option-caret left" aria-hidden="true"></ion-icon>
+            <span class="option-text">Previous</span>
+          </button>
+
+          <button
+            type="button"
+            class="option-button nav-choice"
+            (click)="nextCard()"
+            [disabled]="displayCards.length <= 1"
+            aria-label="Next"
+          >
+            <span class="option-text">Next</span>
+            <ion-icon name="arrow-forward-outline" class="option-caret" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-overlay" *ngIf="isImageModalOpen" (click)="closeImageModal()">
+    <div class="detail-card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeImageModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      
+      <h3 class="card-title">{{ currentCard?.label || 'Item' }}</h3>
+      
+      <div class="image-container-modal">
+        <img [src]="currentCard?.image" [alt]="currentCard?.label || 'Item'" class="card-image" *ngIf="currentCard?.image" />
+      </div>
+      
+      <div class="card-actions" *ngIf="!isPatientMode">
+        <button type="button" class="action-btn-modal edit-btn" (click)="openEditModal()">
+          <ion-icon name="create-outline"></ion-icon>
+          Edit
+        </button>
+        <button type="button" class="action-btn-modal delete-btn" (click)="deleteCurrentCard()">
+          <ion-icon name="trash-outline"></ion-icon>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="edit-card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeEditModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+      
+      <h3 class="edit-title">Edit Item</h3>
+      
+      <div class="edit-image-section">
+        <div class="image-preview">
+          <img [src]="editCardImage" alt="Preview" *ngIf="editCardImage" />
+          <div class="no-image" *ngIf="!editCardImage">
+            <ion-icon name="image-outline"></ion-icon>
+          </div>
+        </div>
+        <button type="button" class="change-image-btn" (click)="triggerImagePicker()">
+          <ion-icon name="camera-outline"></ion-icon>
+          Change Photo
+        </button>
+        <input 
+          type="file" 
+          accept="image/*" 
+          class="hidden-input" 
+          #editImageInput
+          (change)="onEditImageSelected($event)" />
+      </div>
+      
+      <div class="edit-form">
+        <label class="form-label">Name</label>
+        <input 
+          type="text" 
+          class="edit-input" 
+          [(ngModel)]="editCardLabel" 
+          placeholder="Enter name" />
+      </div>
+      
+      <div class="edit-actions">
+        <button type="button" class="action-btn-modal cancel-btn" (click)="closeEditModal()">
+          Cancel
+        </button>
+        <button type="button" class="action-btn-modal save-btn" (click)="saveCardEdit()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-content>
